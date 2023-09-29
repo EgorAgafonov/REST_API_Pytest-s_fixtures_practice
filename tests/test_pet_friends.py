@@ -1,16 +1,18 @@
 from api import PetFriends
 from settings import valid_email, valid_password, invalid_email, invalid_password
+from tests.conftest import some_data
 import os
+import requests
 import pytest
 import time
 
 pf = PetFriends()
 
 
-def test_get_api_key_for_valid_user(email=valid_email, password=valid_password):
-    """Проверяем что запрос API ключа возвращает статус 200 и в результате содержится слово key."""
 
-    status, result = pf.get_api_key(email, password)
 
-    assert status == 200
-    assert 'key' in result
+def test_getAllPets(get_key):
+    response = requests.get(url='https://petfriends.skillfactory.ru/api/pets',
+                            headers={"Cookie": get_key})
+    assert response.status_code == 200, 'Запрос выполнен неуспешно'
+    assert len(response.json().get('pets')) > 0, 'Количество питомцев не соответствует ожиданиям'
