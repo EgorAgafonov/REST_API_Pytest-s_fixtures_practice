@@ -9,7 +9,7 @@ def some_data():
     return 42
 
 
-@pytest.fixture()
+@pytest.fixture(autouse=True)
 def get_key():
     response = requests.post(url='https://petfriends.skillfactory.ru/login',
                              data={"email": valid_email, "pass": valid_password})
@@ -18,7 +18,7 @@ def get_key():
     return response.request.headers.get('Cookie')
 
 
-@pytest.fixture()
+@pytest.fixture(autouse=True)
 def time_delta():
     start_time = datetime.now()
     yield
