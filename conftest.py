@@ -23,7 +23,7 @@ def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_emai
     return result
 
 
-@pytest.fixture()
+@pytest.fixture(autouse=True)
 def time_delta():
     start_time = datetime.now()
     yield

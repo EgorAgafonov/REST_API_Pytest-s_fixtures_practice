@@ -12,7 +12,7 @@ class PetFriends:
     def __init__(self):
         self.base_url = "https://petfriends.skillfactory.ru/"
 
-    def create_pet_simple(self, auth_key: json, name: str, animal_type: str, age: float) -> json:
+    def create_pet_simple(self, name: str, animal_type: str, age: float) -> json:
         """Метод отправляет на сервер базовую информацию о добавляемом питомце без фотографии.
         Возвращает код состояния ответа на запрос и данные добавленного питомца в формате JSON."""
 

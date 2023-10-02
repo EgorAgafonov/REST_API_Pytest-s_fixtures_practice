@@ -10,19 +10,20 @@ import time
 pf = PetFriends()
 
 
-# def test_getAllPets(get_key):
-#     response = requests.get(url='https://petfriends.skillfactory.ru/api/pets',
-#                             headers={"Cookie": get_key}, params={'filter': 'my_pets'})
-#     assert response.status_code == 200, 'Запрос выполнен неуспешно'
-#     assert len(response.json().get('pets')) == 0, 'Количество питомцев не соответствует ожиданиям'
+def test_getAllPets(get_api_key):
+    response = requests.get(url='https://petfriends.skillfactory.ru' + '/api/pets',
+                            headers={'auth_key': get_api_key['key']}, params={'filter': 'my_pets'})
+
+    assert response.status_code == 200, 'Запрос выполнен неуспешно'
+    assert len(response.json().get('pets')) > 6, 'Количество питомцев не соответствует ожиданиям'
 
 
-def test_create_pet_simple(get_key):
-    data = {'name': "Барон", 'animal_type': 'персидская', 'age': '10'}
-    response = requests.post(url='https://petfriends.skillfactory.ru/' + '/api/create_pet_simple',
-                             headers={'Cookie': get_key}, data=data)
+def test_create_pet_simple(get_api_key):
+    data = {'name': "Baron", 'animal_type': 'persian', 'age': '10'}
+    response = requests.post(url='https://petfriends.skillfactory.ru' + '/api/create_pet_simple',
+                             headers={'auth_key': get_api_key['key']}, data=data)
     status = response.status_code
-    result = response.text
+    result = response.json()
 
-    assert status == 200
-    print(result.find('Барон'))
+    assert status == 200, 'Запрос выполнен неуспешно'
+    assert result['name'] == 'Baron', 'Запрос неверный, карточка питомца не создана'
