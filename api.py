@@ -12,10 +12,18 @@ class PetFriends:
     def __init__(self):
         self.base_url = "https://petfriends.skillfactory.ru/"
 
-    def get_key(self):
-        # переменные email и password нужно заменить своими учетными данными
-        response = requests.post(url='https://petfriends.skillfactory.ru/login',
-                                 data={"email": valid_email, "pass": valid_password})
-        assert response.status_code == 200, 'Запрос выполнен неуспешно'
-        assert 'Cookie' in response.request.headers, 'В запросе не передан ключ авторизации'
-        return response.request.headers.get('Cookie')
+
+    def create_pet_simple(self, auth_key: json, name: str, animal_type: str, age: float) -> json:
+        """Метод отправляет на сервер базовую информацию о добавляемом питомце без фотографии.
+        Возвращает код состояния ответа на запрос и данные добавленного питомца в формате JSON."""
+
+        headers = {'auth_key': auth_key['key']}
+        data = {'name': name, 'animal_type': animal_type, 'age': age}
+        res = requests.post(self.base_url + 'api/create_pet_simple', headers=headers, data=data)
+        status = res.status_code
+        result = ""
+        try:
+            result = res.json()
+        except json.decoder.JSONDecodeError:
+            result = res.text
+        return status, result
