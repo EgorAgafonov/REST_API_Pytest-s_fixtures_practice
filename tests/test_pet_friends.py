@@ -28,15 +28,16 @@ def test_create_pet_simple(get_api_key):
     сервера. Использование фикстуры get_api_key позволяет избежать многострочного кода в тестовом наборе(коллекции),
     делает код более лаконичным."""
 
-    status, result = pf.create_pet_simple(auth_key=get_api_key, name='Richard', animal_type='bobcat', age=1.6)
+    status, result = pf.create_pet_simple(auth_key=get_api_key, name='Richard', animal_type='bobcat', age='1.6')
 
     assert status == 200, 'Запрос выполнен неуспешно'
     assert result['name'] == 'Richard', 'Запрос неверный, карточка питомца не создана'
 
 
-def test_create_pet_wth_foto(get_api_key, name='Larry', animal_type='bear', age='1',
-                             pet_photo='images/cat2.jpg'):
+def test_create_pet_wth_foto(get_api_key, name='Tomas', animal_type='british-lazy', age='2',
+                             pet_photo='images/cat3.bmp'):
     """"""
+
     pet_photo = os.path.join(os.path.dirname(__file__), pet_photo)
 
     status, result = pf.create_pet_wth_foto(auth_key=get_api_key, name=name, animal_type=animal_type, age=age,
