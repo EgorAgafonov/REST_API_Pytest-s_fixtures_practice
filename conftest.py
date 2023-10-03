@@ -23,9 +23,9 @@ def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_emai
     return result['key']
 
 
-# @pytest.fixture(autouse=True)
-# def time_delta():
-#     start_time = datetime.now()
-#     yield
-#     end_time = datetime.now()
-#     print(f"\nВремя прохождения теста: {end_time - start_time}")
+@pytest.fixture(autouse=True)
+def time_delta():
+    start_time = datetime.now()
+    yield
+    end_time = datetime.now()
+    print(f"\nВремя прохождения теста: {end_time - start_time}")
