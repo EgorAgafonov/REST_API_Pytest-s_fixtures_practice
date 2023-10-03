@@ -7,6 +7,7 @@ from settings import *
 
 @pytest.fixture()
 def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_email, password=valid_password) -> json:
+    """"""
 
     headers = {'email': email, 'password': password}
     res = requests.get(base_url + 'api/key', headers=headers)
@@ -24,8 +25,10 @@ def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_emai
 
 
 @pytest.fixture(autouse=True)
-def time_delta():
+def duration_of_test():
     start_time = datetime.now()
+    print(f'\n\nНачало выполнения теста:{start_time} сек.')
     yield
     end_time = datetime.now()
-    print(f"\nВремя прохождения теста: {end_time - start_time}")
+    print(f'\nОкончание выполнения теста:{end_time} сек.')
+    print(f"\nИТОГО: продолжительность теста: {end_time - start_time} сек.")

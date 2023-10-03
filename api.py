@@ -10,7 +10,7 @@ class PetFriends:
     """Библиотека методов для тестирования API платформы PetFriends."""
 
     def __init__(self):
-        self.base_url = "https://petfriends.skillfactory.ru/"
+        self.base_url = "https://petfriends.skillfactory.ru"
 
     def create_pet_simple(self, auth_key, name: str, animal_type: str, age: float) -> json:
         """Метод отправляет на сервер базовую информацию о добавляемом питомце без фотографии.
@@ -18,11 +18,33 @@ class PetFriends:
 
         headers = {'auth_key': auth_key}
         data = {'name': name, 'animal_type': animal_type, 'age': age}
-        res = requests.post(self.base_url + 'api/create_pet_simple', headers=headers, data=data)
-        status = res.status_code
+        response = requests.post(self.base_url + '/api/create_pet_simple', headers=headers, data=data)
+        status = response.status_code
         result = ""
         try:
-            result = res.json()
+            result = response.json()
         except json.decoder.JSONDecodeError:
-            result = res.text
+            result = response.text
+        return status, result
+
+    def create_pet_wth_foto(self, auth_key, name, animal_type, age, pet_photo):
+        """"""
+
+        data = MultipartEncoder(
+            fields={
+                'name': name,
+                'animal_type': animal_type,
+                'age': age,
+                'pet_photo': (pet_photo, open(pet_photo, 'rb'), 'image/jpeg')
+            })
+        headers = {'auth_key': auth_key, 'Content-Type': data.content_type}
+
+        response = requests.post(self.base_url + '/api/pets', headers=headers, data=data)
+
+        status = response.status_code
+        result = ""
+        try:
+            result = response.json()
+        except json.decoder.JSONDecodeError:
+            result = response.text
         return status, result
