@@ -89,7 +89,18 @@ def test_delete_pet_id(get_api_key):
 def test_delete_all_users_pets(get_api_key):
     """"""
 
-    status, result = pf.delete_all_my_pets(auth_key=get_api_key)
+    _, my_pets_list = pf.get_all_pets(auth_key=get_api_key, filters='my_pets')
 
-    assert status == 200
-    print(f'\n{result}')
+    while len(my_pets_list['pets']) > 0:
+
+        result = pf.delete_pet(auth_key=get_api_key, pet_id=my_pets_list['pets'][0]['id'])
+        _, my_pets_list = pf.get_all_pets(auth_key=get_api_key, filters='my_pets')
+
+    assert result == 200
+    assert my_pets_list['pets'] == []
+
+
+
+
+
+
