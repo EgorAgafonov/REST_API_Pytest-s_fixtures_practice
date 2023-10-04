@@ -11,8 +11,18 @@ pf = PetFriends()
 
 
 def test_getAllPets(get_api_key):
+    """Позитивный тест проверки запроса размещенных пользователем карточек питомцев. Для обязательной,
+    предварительной авторизации пользователя на сайте перед размещением карточки c помощью библиотеки Pytest сначала
+    инициализируется функция-фикстура get_api_key. В случае положительной авторизации на сайте (в фикстуре get_api_key
+    реализована тестовая проверка на предмет валидации пользователя на сайте) с помощью библиотеки requests, выполняется
+    get-запрос на предоставление всех карточек питомцев, созданных пользователем. В параметрах запроса передаётся
+    необходимое значение фильтра - 'my_pets'. Валидация теста считается успешной в случае, если статус ответа сервера
+    равен 200, а количество полученных карточек питомцев (элементов списка в json-словаре) больше 0. Использование
+    фикстуры get_api_key позволяет избежать многострочного кода в тестовом наборе(коллекции), делает код более
+    лаконичным."""
+
     response = requests.get(url='https://petfriends.skillfactory.ru' + '/api/pets',
-                            headers={'auth_key': get_api_key}, params={'filter': ''})
+                            headers={'auth_key': get_api_key}, params={'filter': 'my_pets'})
 
     assert response.status_code == 200, 'Запрос выполнен неуспешно'
     assert len(response.json().get('pets')) > 0, 'Количество питомцев не соответствует ожиданиям'
@@ -34,13 +44,12 @@ def test_create_pet_simple(get_api_key):
     assert result['name'] == 'Richard', 'Запрос неверный, карточка питомца не создана'
 
 
-def test_create_pet_wth_foto(get_api_key, name='Tomas', animal_type='british-lazy', age='2',
-                             pet_photo='images/cat3.bmp'):
+def test_create_pet_wth_foto(get_api_key, pet_photo='images/cat3.bmp'):
     """"""
 
-    pet_photo = os.path.join(os.path.dirname(__file__), pet_photo)
+    # pet_photo = os.path.join(os.path.dirname(__file__), pet_photo)
 
-    status, result = pf.create_pet_wth_foto(auth_key=get_api_key, name=name, animal_type=animal_type, age=age,
+    status, result = pf.create_pet_wth_foto(auth_key=get_api_key, name='Tomas', animal_type='british-lazy', age='2',
                                             pet_photo=pet_photo)
 
     assert status == 200, 'Запрос выполнен неуспешно'
