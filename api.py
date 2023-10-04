@@ -13,7 +13,7 @@ class PetFriends:
         self.base_url = "https://petfriends.skillfactory.ru"
 
     def create_pet_simple(self, auth_key, name: str, animal_type: str, age) -> json:
-        """Метод отправляет на сервер базовую информацию о добавляемом питомце без фотографии.
+        """Метод позволяет разместить на сервере базовую информацию о питомце без фотографии.
         Возвращает код состояния ответа на запрос и данные добавленного питомца в формате JSON."""
 
         headers = {'auth_key': auth_key}
@@ -28,7 +28,8 @@ class PetFriends:
         return status, result
 
     def create_pet_wth_foto(self, auth_key, name, animal_type, age, pet_photo):
-        """"""
+        """Метод позволяет разместить на сервере базовую информацию о питомце, а также его фотографию.
+        Возвращает код состояния ответа на запрос и данные добавленного питомца в формате JSON."""
 
         data = MultipartEncoder(
             fields={
@@ -48,3 +49,36 @@ class PetFriends:
         except json.decoder.JSONDecodeError:
             result = response.text
         return status, result
+
+    def get_all_pets(self, auth_key,  filters: str):
+        """"""
+
+        headers = {'auth_key': auth_key}
+        filters = {'filter': filters}
+
+        response = requests.get(self.base_url + '/api/pets',
+                                headers=headers, params=filters)
+
+        status = response.status_code
+        result = ""
+        try:
+            result = response.json()
+        except json.decoder.JSONDecodeError:
+            result = response.text
+        return status, result
+
+
+    def delete_pet(self, auth_key, pet_id):
+        """Метод позволяет удалить на сервере карточку питомца на основании id-номера. Возвращает код состояния
+        ответа."""
+
+        headers = {'auth_key': auth_key}
+
+        response = requests.delete(self.base_url + '/api/pets/' + pet_id, headers=headers)
+
+        status = response.status_code
+
+        return status
+
+
+

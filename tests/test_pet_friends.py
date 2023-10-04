@@ -20,11 +20,10 @@ def test_getAllPets(get_api_key):
     количество полученных карточек питомцев (элементов списка в json-словаре) больше 0. Использование фикстуры
     get_api_key позволяет избежать многострочного кода в тестовом наборе(коллекции), делает код более лаконичным."""
 
-    response = requests.get(url='https://petfriends.skillfactory.ru' + '/api/pets',
-                            headers={'auth_key': get_api_key}, params={'filter': 'my_pets'})
+    status, result = pf.get_all_pets(auth_key=get_api_key, filters='my_pets')
 
-    assert response.status_code == 200, 'Запрос выполнен неуспешно'
-    assert len(response.json().get('pets')) > 0, 'Количество питомцев не соответствует ожиданиям'
+    assert status == 200, 'Запрос выполнен неуспешно'
+    assert len(result.get('pets')) > 0, 'Количество питомцев не соответствует ожиданиям'
 
 
 def test_create_pet_simple(get_api_key):
@@ -54,4 +53,11 @@ def test_create_pet_wth_photo(get_api_key, pet_photo='images/cat1.jpg'):
 
     assert status == 200, 'Запрос выполнен неуспешно'
     assert result['pet_photo'] != '', 'Запрос неверный, карточка питомца с фото не создана'
+
+
+# def test_delete_pet_id(get_api_key):
+#     """"""
+#     list_of_pets = pf.
+#     status = pf.delete_pet(auth_key=get_api_key, pet_id='')
+
 
