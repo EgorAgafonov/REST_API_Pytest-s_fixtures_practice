@@ -94,4 +94,4 @@ class PetFriends:
             status = delete_pets.status_code
             result = my_pets.json()
 
-            return status, result
+        return status, result

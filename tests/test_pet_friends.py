@@ -86,18 +86,31 @@ def test_delete_pet_id(get_api_key):
     assert pet_id not in my_pets.values()
 
 
-def test_delete_all_users_pets(get_api_key):
-    """"""
+# def test_delete_all_users_pets(get_api_key):
+#     """"""
+#
+#     _, my_pets_list = pf.get_all_pets(auth_key=get_api_key, filters='my_pets')
+#
+#     while len(my_pets_list['pets']) > 0:
+#
+#         status = pf.delete_pet(auth_key=get_api_key, pet_id=my_pets_list['pets'][0]['id'])
+#         _, my_pets_list = pf.get_all_pets(auth_key=get_api_key, filters='my_pets')
+#
+#     assert status == 200
+#     assert my_pets_list['pets'] == []
 
-    _, my_pets_list = pf.get_all_pets(auth_key=get_api_key, filters='my_pets')
 
-    while len(my_pets_list['pets']) > 0:
+def test_delete_all_pets(get_api_key):
+    """Позитивный тест проверки удаления всех карточек питомцев из профиля пользователя. Используется фикстура
+    get_api_key, как и в предыдущем тесте. В случае положительной авторизации на сайте с помощью модуля api.py с классом
+    атрибутов и методов PetFriends, выполняется delete-запрос на удаление карточки питомца по id-номеру. Валидация теста
+    считается успешной в случае, если статус ответа сервера на запрос равен 200, а id-номер удаляемого питомца
+    (его карточка) отсутствует в повторном get-запросе списка всех питомцев пользователя."""
 
-        result = pf.delete_pet(auth_key=get_api_key, pet_id=my_pets_list['pets'][0]['id'])
-        _, my_pets_list = pf.get_all_pets(auth_key=get_api_key, filters='my_pets')
+    status, result = pf.delete_all_my_pets(auth_key=get_api_key)
 
-    assert result == 200
-    assert my_pets_list['pets'] == []
+    assert status == 200
+    assert result['pets'] == []
 
 
 
