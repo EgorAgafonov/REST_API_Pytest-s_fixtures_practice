@@ -84,3 +84,12 @@ def test_delete_pet_id(get_api_key):
 
     assert status == 200
     assert pet_id not in my_pets.values()
+
+
+def test_delete_all_users_pets(get_api_key):
+    """"""
+
+    status, result = pf.delete_all_my_pets(auth_key=get_api_key)
+
+    assert status == 200
+    print(f'\n{result}')

@@ -50,7 +50,7 @@ class PetFriends:
             result = response.text
         return status, result
 
-    def get_all_pets(self, auth_key,  filters: str):
+    def get_all_pets(self, auth_key, filters: str):
         """"""
 
         headers = {'auth_key': auth_key}
@@ -67,7 +67,6 @@ class PetFriends:
             result = response.text
         return status, result
 
-
     def delete_pet(self, auth_key, pet_id):
         """Метод позволяет удалить на сервере карточку питомца на основании id-номера. Возвращает код состояния
         ответа."""
@@ -80,5 +79,19 @@ class PetFriends:
 
         return status
 
+    def delete_all_my_pets(self, auth_key):
+        """Метод позволяет удалить на сервере все карточки питомцев, размещенные пользователем в его профиле.
+        Возвращает код состояния ответа."""
 
+        headers = {'auth_key': auth_key}
+        filters = {'filter': 'my_pets'}
+        my_pets = requests.get(self.base_url + '/api/pets', headers=headers, params=filters)
+        result = my_pets.json()
 
+        while len(result['pets']) > 0:
+            delete_pets = requests.delete(self.base_url + '/api/pets/' + result['pets'][0]['id'], headers=headers)
+            my_pets = requests.get(self.base_url + '/api/pets', headers=headers, params=filters)
+            status = delete_pets.status_code
+            result = my_pets.json()
+
+            return status, result
