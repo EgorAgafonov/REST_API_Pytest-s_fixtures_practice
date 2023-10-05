@@ -25,6 +25,13 @@ def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_emai
 
 
 @pytest.fixture(scope='class', autouse=True)
+def greeting():
+    print('\nТестирование в классе начинается.')
+    yield
+    print(f'\nТестирование в классе окончено.')
+
+
+@pytest.fixture(scope='class', autouse=True)
 def duration_of_test():
     start_time = datetime.now()
     print(f'\n\nНачало выполнения теста:{start_time} сек.')
@@ -34,10 +41,6 @@ def duration_of_test():
     print(f"\nИТОГО: продолжительность теста: {end_time - start_time} сек.")
 
 
-@pytest.fixture(scope='class', autouse=True)
-def greeting():
-    print('\nТестирование в классе начинается.')
-    yield
-    print(f'\nТестирование в классе окончено.')
+
 
 
