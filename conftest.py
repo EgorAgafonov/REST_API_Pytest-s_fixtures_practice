@@ -32,3 +32,6 @@ def duration_of_test():
     end_time = datetime.now()
     print(f'\nОкончание выполнения теста:{end_time} сек.')
     print(f"\nИТОГО: продолжительность теста: {end_time - start_time} сек.")
+
+
+filename = 'tests/random_text.txt'
