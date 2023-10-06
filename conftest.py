@@ -24,7 +24,7 @@ def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_emai
     return result['key']
 
 
-@pytest.fixture(scope='class', autouse=True)
+@pytest.fixture(scope='function', autouse=True)
 def greeting():
     print('\nТестирование в классе начинается.')
     yield

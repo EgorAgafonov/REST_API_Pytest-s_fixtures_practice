@@ -25,16 +25,18 @@ class TestClass_PetFriends:
         assert status == 200, 'Запрос выполнен неуспешно'
         assert result['name'] == 'Richard', 'Запрос неверный, карточка питомца не создана'
 
-    def test_create_pet_wth_photo(self, get_api_key, pet_photo='images/cat2.jpg'):
+    def test_create_pet_wth_photo(self, get_api_key, name='Tomas', animal_type='british-lazy', age='2',
+                                  pet_photo='images/cat2.jpg'):
         """Позитивный тест проверки размещения пользователем карточки питомца с фотографией. Используется фикстура
         get_api_key, как и в предыдущем тесте. В случае положительной авторизации на сайте, с помощью модуля api.py с классом
         атрибутов и методов PetFriends выполняется post-запрос на размещение карточки с фото. Валидация теста считается
         успешной в случае, если статус ответа сервера равен 200, а возвращаемое в ответе сервера значение ключа 'pet_photo'
         не пустое (т.е. содержит байтовое представление размещенного фото питомца)."""
 
-        pet_photo = os.path.join(os.path.dirname(__file__), pet_photo)
 
-        status, result = pf.create_pet_wth_foto(auth_key=get_api_key, name='Tomas', animal_type='british-lazy', age='2',
+        # pet_photo = os.path.join(os.path.dirname(__file__), pet_photo)
+
+        status, result = pf.create_pet_wth_foto(auth_key=get_api_key, name=name, animal_type=animal_type, age=age,
                                                 pet_photo=pet_photo)
 
         assert status == 200, 'Запрос выполнен неуспешно'
