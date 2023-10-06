@@ -27,7 +27,7 @@ def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_emai
     return result['key']
 
 
-@pytest.fixture(scope='function', autouse=True)
+@pytest.fixture(scope='class')
 def greeting():
     print('\nТестирование в классе начинается.')
     yield
@@ -37,11 +37,33 @@ def greeting():
 @pytest.fixture(scope='class', autouse=True)
 def duration_of_test():
     start_time = datetime.now()
-    print(f'\n\nНачало выполнения теста:{start_time} сек.')
+    print(f'\nНачало выполнения теста:{start_time} сек.\n')
     yield
     end_time = datetime.now()
-    print(f'\nОкончание выполнения теста:{end_time} сек.')
+    print(f'Окончание выполнения теста:{end_time} сек.')
     print(f"\nИТОГО: продолжительность теста: {end_time - start_time} сек.")
+
+
+@pytest.fixture(scope='function', autouse=True)
+def introspection_of_test(request):
+    yield
+    print(f'\n1. Имя фикстуры: {request.fixturename}.')
+    print(f'2. Область видимости фикстуры: {request.scope}.')
+    print(f'3. Имя тестируемой функции: {request.function.__name__}.')
+    print(f'4. Имя класса тестового набора: {request.cls}.')
+    print(f'5. Относительный путь к тестовому модулю: {request.module.__name__}.')
+    print(f'6. Полный путь к тестовому модулю: {request.fspath}.\n')
+    if request.cls:
+        return f"\n У теста {request.function.__name__} класс есть\n"
+    else:
+        return f"\n У теста {request.function.__name__} класса нет\n"
+
+
+
+
+
+
+
 
 
 
