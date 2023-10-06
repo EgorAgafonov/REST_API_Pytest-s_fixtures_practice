@@ -7,7 +7,10 @@ from settings import *
 
 @pytest.fixture()
 def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_email, password=valid_password) -> json:
-    """"""
+    """Метод для авторизации на платформе PetFriends и получения auth-key-ключа для отправки запросов. Одновременно
+    является и тестируемой функцией (каждый раз при вызове), и setup-фикстурой pytest для передачи в качестве аргумента
+    в тестируемые функции (каждый запрос требует отправлять в заголовке auth_key). Функция возвращает строковое значение
+    auth-key."""
 
     headers = {'email': email, 'password': password}
     res = requests.get(base_url + 'api/key', headers=headers)

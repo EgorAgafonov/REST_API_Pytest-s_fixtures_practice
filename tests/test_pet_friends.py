@@ -11,7 +11,7 @@ pf = PetFriends()
 
 
 class TestClass_PetFriends:
-    """Коллекция авто-тестов для REST API сервиса PetFriends. """
+    """Коллекция авто-тестов для тестирования REST API сервиса платформы PetFriends. """
 
     def test_create_pet_simple(self, get_api_key):
         """Позитивный тест проверки размещения пользователем карточки питомца без фотографии. Используется фикстура

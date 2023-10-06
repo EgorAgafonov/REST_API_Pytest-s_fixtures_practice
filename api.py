@@ -7,7 +7,7 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 
 class PetFriends:
-    """Библиотека методов для тестирования API платформы PetFriends."""
+    """Класс PetFriends с методами для отправки api-запросов через REST API сервис платформы PetFriends."""
 
     def __init__(self):
         self.base_url = "https://petfriends.skillfactory.ru"
