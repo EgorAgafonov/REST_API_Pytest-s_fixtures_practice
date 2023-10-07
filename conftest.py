@@ -47,16 +47,16 @@ def duration_of_test(request):
 @pytest.fixture(scope='function', autouse=True)
 def introspection_of_test(request):
     yield
-    print(f'\n- Имя фикстуры: {request.fixturename}.')
+    print(f'\n\n- Имя теста (тестируемой функции): {request.function.__name__}.')
+    print(f'- Имя коллекции (тестового класса): {request.cls}.')
+    print(f'- Имя фикстуры: {request.fixturename}.')
     print(f'- Область видимости фикстуры: {request.scope}.')
-    print(f'- Имя тестируемой функции: {request.function.__name__}.')
-    print(f'- Имя класса тестового набора: {request.cls}.')
     print(f'- Относительный путь к тестовому модулю: {request.module.__name__}.')
     print(f'- Абсолютный путь к тестовому модулю: {request.fspath}.\n')
     if request.cls:
-        return f"\n У теста {request.function.__name__} класс есть\n"
+        return f"\n У теста(тестируемой функции) {request.function.__name__} есть коллекция (тестовый класс).\n"
     else:
-        return f"\n У теста {request.function.__name__} класса нет\n"
+        return f"\n У теста(тестируемой функции) {request.function.__name__} коллекция (тестовый класс) отсутствует.\n"
 
 
 
