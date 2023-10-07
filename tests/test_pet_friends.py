@@ -34,7 +34,7 @@ class TestClass_PetFriends:
         не пустое (т.е. содержит байтовое представление размещенного фото питомца)."""
 
 
-        # pet_photo = os.path.join(os.path.dirname(__file__), pet_photo)
+        pet_photo = os.path.join(os.path.dirname(__file__), pet_photo)
 
         status, result = pf.create_pet_wth_foto(auth_key=get_api_key, name=name, animal_type=animal_type, age=age,
                                                 pet_photo=pet_photo)
