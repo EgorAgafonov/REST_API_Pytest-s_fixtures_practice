@@ -34,14 +34,14 @@ def greeting():
     print(f'\nТестирование в классе окончено.')
 
 
-@pytest.fixture(scope='class', autouse=True)
-def duration_of_test():
+@pytest.fixture(scope='function', autouse=True)
+def duration_of_test(request):
     start_time = datetime.now()
-    print(f'\nНачало выполнения теста:{start_time} сек.\n')
+    print(f'\nНачало выполнения тестовой функции:{start_time} сек.\n')
     yield
     end_time = datetime.now()
     print(f'Окончание выполнения теста:{end_time} сек.')
-    print(f"\nИТОГО: продолжительность теста: {end_time - start_time} сек.")
+    print(f"\nИТОГО: продолжительность теста {request.function.__name__}: {end_time - start_time} сек.")
 
 
 @pytest.fixture(scope='function', autouse=True)
@@ -52,7 +52,7 @@ def introspection_of_test(request):
     print(f'3. Имя тестируемой функции: {request.function.__name__}.')
     print(f'4. Имя класса тестового набора: {request.cls}.')
     print(f'5. Относительный путь к тестовому модулю: {request.module.__name__}.')
-    print(f'6. Полный путь к тестовому модулю: {request.fspath}.\n')
+    print(f'6. Абсолютный путь к тестовому модулю: {request.fspath}.\n')
     if request.cls:
         return f"\n У теста {request.function.__name__} класс есть\n"
     else:
