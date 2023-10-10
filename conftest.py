@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 import requests
 from datetime import *
@@ -61,6 +63,7 @@ def introspection_of_test(request):
         return f"\n У теста(тестируемой функции) {request.function.__name__} есть коллекция (тестовый класс).\n"
     else:
         return f"\n У теста(тестируемой функции) {request.function.__name__} коллекция (тестовый класс) отсутствует.\n"
+
 
 
 

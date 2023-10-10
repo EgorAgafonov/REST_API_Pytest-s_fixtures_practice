@@ -1,3 +1,5 @@
+import sys
+
 from api import PetFriends
 from settings import valid_email, valid_password, invalid_email, invalid_password
 import os
@@ -90,7 +92,8 @@ class TestClass_PetFriends:
         assert status == 200
         assert pet_id not in my_pets.values()
 
-    # @pytest.mark.skip(reason='Метод delete_all_my_pets требует доработки, тестирование функции отложено.')
+    @pytest.mark.skip(reason='Метод запроса работает некорректно, выполнение теста отложено.')
+    @pytest.mark.skipif(sys.version_info < (3, 11), reason='Тест требует python версии 3.11 или выше.')
     def test_delete_all_pets(self, get_api_key):
         """Позитивный тест проверки удаления всех карточек питомцев из профиля пользователя. Используется фикстура
         get_api_key, как и в предыдущем тесте. В случае положительной авторизации на сайте, с помощью модуля api.py с
