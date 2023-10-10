@@ -8,14 +8,14 @@ from settings import *
 @pytest.fixture(scope='class', autouse=True)
 def duration_of_collection(request):
     start_time = datetime.now()
-    print(f'\n1/2 НАЧАЛО\nвыполнения тестовой коллекции: {start_time} сек.')
+    print(f'\n1/3 START COLLECTION:\nНачало выполнения тестовой коллекции: {start_time} сек.')
     yield
     end_time = datetime.now()
-    print(f'2/2 ОКОНЧАНИЕ\nвыполнения тестовой коллекции: {end_time} сек.')
-    print(f"    ИТОГО: Общая продолжительность всех тестов в коллекции {request.cls}: {end_time - start_time} сек.\n")
+    print(f'2/3 END COLLECTION:\nОкончание выполнения тестовой коллекции: {end_time} сек.')
+    print(f"3/3 RESULT: Общая продолжительность всех тестов в коллекции {request.cls}: {end_time - start_time} сек.\n")
 
 
-@pytest.fixture(scope='class')
+@pytest.fixture(scope='class', autouse=True)
 def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_email, password=valid_password) -> json:
     """Метод для авторизации на платформе PetFriends и получения auth-key-ключа для отправки запросов. Одновременно
     является и тестируемой функцией (каждый раз при вызове), и setup-фикстурой pytest для передачи в качестве аргумента
@@ -38,20 +38,13 @@ def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_emai
     return result['key']
 
 
-# @pytest.fixture(scope='class')
-# def greeting():
-#     print('\nТестирование в классе начинается.')
-#     yield
-#     print(f'\nТестирование в классе окончено.')
-
-
 @pytest.fixture(scope='function', autouse=True)
 def duration_of_test(request):
     start_time = datetime.now()
-    print(f'\n1.1 Начало выполнения тестовой функции: {start_time} сек.')
+    print(f'\n1)Начало выполнения тестовой функции: {start_time} сек.')
     yield
     end_time = datetime.now()
-    print(f'1.2 Окончание выполнения тестовой функции: {end_time} сек.')
+    print(f'2)Окончание выполнения тестовой функции: {end_time} сек.')
     print(f"    ВСЕГО продолжительность теста {request.function.__name__}: {end_time - start_time} сек.\n")
 
 
