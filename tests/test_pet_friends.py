@@ -8,6 +8,7 @@ import pytest
 import json
 from conftest import *
 import time
+import sys
 
 pf = PetFriends()
 
@@ -95,6 +96,9 @@ class TestClass_PetFriends:
     # #@pytest.mark.skip(reason='Метод запроса работает некорректно, выполнение теста отложено.')
     # @pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.9 или ниже.')
     # @min_python_310_required
+    # @pytest.mark.xfail(sys.platform == 'darwin', reason='Возможны сбои в работе и падение теста на платформе macOS')
+    # @pytest.mark.xfail(raises=UnboundLocalError, reason='У пользователя нет ни одной карточки питомца (нечего '
+    #                                                     'удалять),тест не возможен!')
     def test_delete_all_pets(self, get_api_key):
         """Позитивный тест проверки удаления всех карточек питомцев из профиля пользователя. Используется фикстура
         get_api_key, как и в предыдущем тесте. В случае положительной авторизации на сайте, с помощью модуля api.py с

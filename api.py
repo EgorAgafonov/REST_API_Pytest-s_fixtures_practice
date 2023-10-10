@@ -1,4 +1,6 @@
 import json
+import sys
+
 import pytest
 import requests
 from conftest import get_api_key
@@ -97,3 +99,5 @@ class PetFriends:
             result = my_pets.json()
 
         return status, result
+
+
