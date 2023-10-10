@@ -65,8 +65,8 @@ def introspection_of_test(request):
         return f"\n У теста(тестируемой функции) {request.function.__name__} коллекция (тестовый класс) отсутствует.\n"
 
 
-min_python_310_required = pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.10 или '
-                                                                               'выше.')
+min_python_310_required = pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.9 или '
+                                                                               'ниже, выполнение теста отложено.')
 
 
 

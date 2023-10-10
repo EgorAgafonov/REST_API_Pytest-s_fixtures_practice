@@ -1,5 +1,3 @@
-import sys
-
 from api import PetFriends
 from settings import valid_email, valid_password, invalid_email, invalid_password
 import os
@@ -7,6 +5,7 @@ import requests
 import pytest
 import json
 from conftest import *
+from pytest import *
 import time
 import sys
 
@@ -93,12 +92,14 @@ class TestClass_PetFriends:
         assert status == 200
         assert pet_id not in my_pets.values()
 
-    # #@pytest.mark.skip(reason='Метод запроса работает некорректно, выполнение теста отложено.')
-    # @pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.9 или ниже.')
+    # @pytest.mark.skip(reason='Метод запроса работает некорректно, выполнение теста отложено.')
+    # @pytest.mark.skipif(sys.version_info > (3, 9), reason=f'Тест требует python версии 3.9'
+    #                                                       f'или ниже, выполнение теста отложено.')
     # @min_python_310_required
-    # @pytest.mark.xfail(sys.platform == 'darwin', reason='Возможны сбои в работе и падение теста на платформе macOS')
-    # @pytest.mark.xfail(raises=UnboundLocalError, reason='У пользователя нет ни одной карточки питомца (нечего '
-    #                                                     'удалять),тест не возможен!')
+    # @pytest.mark.xfail(sys.platform == 'win32', reason='Возможны сбои в работе и падение теста на платформе win32')
+    @pytest.mark.xfail(raises=UnboundLocalError, reason='В случае отсутствия карточки(чек) питомцев у пользователя '
+                                                        'рузультат будет равен XFAIL (нечего удалять - '
+                                                        'UnboundLocalError)!!!')
     def test_delete_all_pets(self, get_api_key):
         """Позитивный тест проверки удаления всех карточек питомцев из профиля пользователя. Используется фикстура
         get_api_key, как и в предыдущем тесте. В случае положительной авторизации на сайте, с помощью модуля api.py с
