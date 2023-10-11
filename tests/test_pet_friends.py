@@ -1,5 +1,5 @@
 from api import PetFriends
-from settings import valid_email, valid_password, invalid_email, invalid_password
+from settings import valid_email, valid_password
 import os
 import requests
 import pytest

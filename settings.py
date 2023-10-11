@@ -1,7 +1,7 @@
+import os
+from dotenv import load_dotenv
 
-valid_email = 'fonovagafonov@yandex.ru'
-valid_password = '123456'
-
-invalid_email = '48234@yandex.ru'
-invalid_password = '1111111111'
+load_dotenv()
+valid_email = os.getenv('valid_email')
+valid_password = os.getenv('valid_password')
 
