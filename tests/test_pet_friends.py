@@ -15,7 +15,7 @@ pf = PetFriends()
 class TestClass_PetFriends:
     """Коллекция авто-тестов для тестирования REST API сервиса платформы PetFriends. """
 
-    @pytest.mark._1
+    @pytest.mark.one
     @pytest.mark.create_pet
     def test_create_pet_simple(self, get_api_key):
         """Позитивный тест проверки размещения пользователем карточки питомца без фотографии. Для обязательной,
@@ -33,7 +33,7 @@ class TestClass_PetFriends:
         assert status == 200, 'Запрос выполнен неуспешно'
         assert result['name'] == 'Richard', 'Запрос неверный, карточка питомца не создана'
 
-    @pytest.mark._2
+    @pytest.mark.two
     @pytest.mark.create_pet
     def test_create_pet_wth_photo(self, get_api_key, name='Tomas', animal_type='british-lazy', age='2',
                                   pet_photo='images/cat2.jpg'):
@@ -51,7 +51,7 @@ class TestClass_PetFriends:
         assert status == 200, 'Запрос выполнен неуспешно'
         assert result['pet_photo'] != '', 'Запрос неверный, карточка питомца с фото не создана'
 
-    @pytest.mark._3
+    @pytest.mark.three
     @pytest.mark.get_info
     def test_getAllPets(self, get_api_key):
         """Позитивный тест проверки запроса размещенных пользователем карточек питомцев. Используется фикстура
@@ -67,7 +67,7 @@ class TestClass_PetFriends:
         assert status == 200, 'Запрос выполнен неуспешно'
         assert len(result.get('pets')) > 0, 'Количество питомцев не соответствует ожиданиям'
 
-    @pytest.mark._4
+    @pytest.mark.four
     @pytest.mark.delete_pet
     def test_delete_pet_id(self, get_api_key):
         """Позитивный тест проверки удаления карточки питомца из списка питомцев пользователя. Используется фикстура
@@ -108,7 +108,7 @@ class TestClass_PetFriends:
     # @pytest.mark.xfail(raises=UnboundLocalError, reason="В случае отсутствия карточки(чек) питомцев у пользователя"
     #                                                     "результат будет равен XFAIL (нечего удалять - "
     #                                                     "UnboundLocalError)!")
-    @pytest.mark._5
+    @pytest.mark.five
     @pytest.mark.delete_pet
     def test_delete_all_pets(self, get_api_key):
         """Позитивный тест проверки удаления всех карточек питомцев из профиля пользователя. Используется фикстура
