@@ -43,10 +43,10 @@ def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_emai
 @pytest.fixture(scope='function', autouse=True)
 def duration_of_test(request):
     start_time = datetime.now()
-    print(f'\n1)Начало выполнения тестовой функции: {start_time} сек.')
+    print(f'\n* Начало выполнения тестовой функции: {start_time} сек. *')
     yield
     end_time = datetime.now()
-    print(f'2)Окончание выполнения тестовой функции: {end_time} сек.')
+    print(f'** Окончание выполнения тестовой функции: {end_time} сек. **')
     print(f"    ВСЕГО продолжительность теста {request.function.__name__}: {end_time - start_time} сек.\n")
 
 
@@ -63,6 +63,13 @@ def introspection_of_test(request):
         return f"\n У теста(тестируемой функции) {request.function.__name__} есть коллекция (тестовый класс).\n"
     else:
         return f"\n У теста(тестируемой функции) {request.function.__name__} коллекция (тестовый класс) отсутствует.\n"
+
+
+@pytest.fixture(scope='function', autouse=True)
+def log_of_test(request):
+    yield
+
+
 
 
 min_python_310_required = pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.9 или '
