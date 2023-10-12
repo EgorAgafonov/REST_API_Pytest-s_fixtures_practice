@@ -1,3 +1,13 @@
 
-* Начало выполнения тестовой функции: 2023-10-12 15:27:55.740110 сек. *
-- Имя теста (тестируемой функции): test_create_pet_wth_photo.- Имя коллекции (тестового класса): <class 'tests.test_pet_friends.TestClass_PetFriends'>.- Имя фикстуры: log_of_test.- Область видимости фикстуры: function.- Относительный путь к тестовому модулю: tests.test_pet_friends.- Абсолютный путь к тестовому модулю: C:\Users\agafo\PycharmProjects\pythonProject4_Fixtures_PetFriensTesting\tests\test_pet_friends.py.
+* Начало выполнения тестовой функции: 2023-10-12 16:02:51.832041 сек. *
+
+- Имя теста (тестируемой функции): test_create_pet_simple.
+- Имя коллекции (тестового класса): <class 'tests.test_pet_friends.TestClass_PetFriends'>.
+- Имя фикстуры: log_of_test.
+- Область видимости фикстуры: function.
+- Относительный путь к тестовому модулю: tests.test_pet_friends.
+- Абсолютный путь к тестовому модулю: C:\Users\agafo\PycharmProjects\pythonProject4_Fixtures_PetFriensTesting\tests\test_pet_friends.py.
+
+** Окончание выполнения тестовой функции: 2023-10-12 16:02:51.923912 сек. **
+
+    ВСЕГО продолжительность теста test_create_pet_simple: 0:00:00.091871 сек.

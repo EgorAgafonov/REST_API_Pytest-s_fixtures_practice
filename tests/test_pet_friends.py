@@ -33,6 +33,8 @@ class TestClass_PetFriends:
         assert status == 200, 'Запрос выполнен неуспешно'
         assert result['name'] == 'Richard', 'Запрос неверный, карточка питомца не создана'
 
+        return status
+
     @pytest.mark.two
     @pytest.mark.create_pet
     def test_create_pet_wth_photo(self, get_api_key, name='Tomas', animal_type='british-lazy', age='2',
