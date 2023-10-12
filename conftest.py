@@ -73,16 +73,15 @@ def log_of_test(request, filename='tests/logs/logs.txt'):
     end_time = datetime.now()
     filename = os.path.join(os.path.dirname(__file__), filename)
     with open(filename, 'a') as file_object:
-        file_object.write(f'\n* Начало выполнения тестовой функции: {start_time} сек. *')
-        file_object.write(f'\n\n- Имя теста (тестируемой функции): {request.function.__name__}.')
-        file_object.write(f'\n- Имя коллекции (тестового класса): {request.cls}.')
-        file_object.write(f'\n- Имя фикстуры: {request.fixturename}.')
-        file_object.write(f'\n- Область видимости фикстуры: {request.scope}.')
-        file_object.write(f'\n- Относительный путь к тестовому модулю: {request.module.__name__}.')
-        file_object.write(f'\n- Абсолютный путь к тестовому модулю: {request.fspath}.')
-        file_object.write(f'\n\n** Окончание выполнения тестовой функции: {end_time} сек. **')
-        file_object.write(f"\n\n    ВСЕГО продолжительность теста {request.function.__name__}: {end_time - start_time} "
-                          f"сек.\n")
+        file_object.write(f'\nНачало выполнения тестовой функции: {start_time} сек. *')
+        file_object.write(f'\n\n    - Имя теста (тестируемой функции): {request.function.__name__}.')
+        file_object.write(f'\n    - Имя коллекции (тестового класса): {request.cls}.')
+        file_object.write(f'\n    - Имя фикстуры: {request.fixturename}.')
+        file_object.write(f'\n    - Область видимости фикстуры: {request.scope}.')
+        file_object.write(f'\n    - Относительный путь к тестовому модулю: {request.module.__name__}.')
+        file_object.write(f'\n\n        Окончание выполнения тестовой функции: {end_time} сек. **')
+        file_object.write(f"\n\n            ВСЕГО продолжительность теста {request.function.__name__}: "
+                          f"{end_time - start_time} сек.\n\n")
 
 
 min_python_310_required = pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.9 или '
