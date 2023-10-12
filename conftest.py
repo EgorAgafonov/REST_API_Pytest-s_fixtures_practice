@@ -1,6 +1,7 @@
 import sys
 
 import pytest
+from pytest import ExitCode
 import requests
 from datetime import *
 import json
@@ -67,13 +68,21 @@ def introspection_of_test(request):
 
 @pytest.fixture(scope='function', autouse=True)
 def log_of_test(request):
+    start_time = datetime.now()
     yield
-
-
+    end_time = datetime.now()
+    with open('\\tests\\logs\\logs.txt', 'a') as file_object:
+        # file_object.write(f'\n* РЕЗУЛЬТАТ: {pytest.ExitCode()} *')
+        file_object.write(f'\n* Начало выполнения тестовой функции: {start_time} сек. *')
+        file_object.write(f'\n- Имя теста (тестируемой функции): {request.function.__name__}.')
+        file_object.write(f'- Имя коллекции (тестового класса): {request.cls}.')
+        file_object.write(f'- Имя фикстуры: {request.fixturename}.')
+        file_object.write(f'- Область видимости фикстуры: {request.scope}.')
+        file_object.write(f'- Относительный путь к тестовому модулю: {request.module.__name__}.')
+        file_object.write(f'- Абсолютный путь к тестовому модулю: {request.fspath}.')
+        print(f'** Окончание выполнения тестовой функции: {end_time} сек. **')
+        print(f"    ВСЕГО продолжительность теста {request.function.__name__}: {end_time - start_time} сек.\n")
 
 
 min_python_310_required = pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.9 или '
                                                                                'ниже, выполнение теста отложено.')
-
-
-
