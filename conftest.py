@@ -67,11 +67,12 @@ def introspection_of_test(request):
 
 
 @pytest.fixture(scope='function', autouse=True)
-def log_of_test(request):
+def log_of_test(request, filename='tests/logs/logs.txt'):
     start_time = datetime.now()
     yield
     end_time = datetime.now()
-    with open('\\tests\\logs\\logs.txt', 'a') as file_object:
+    filename = os.path.join(os.path.dirname(__file__), filename)
+    with open(filename, 'a') as file_object:
         # file_object.write(f'\n* РЕЗУЛЬТАТ: {pytest.ExitCode()} *')
         file_object.write(f'\n* Начало выполнения тестовой функции: {start_time} сек. *')
         file_object.write(f'\n- Имя теста (тестируемой функции): {request.function.__name__}.')
