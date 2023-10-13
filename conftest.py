@@ -18,7 +18,7 @@ def duration_of_collection(request):
     print(f"3/3 RESULT: Общая продолжительность всех тестов в коллекции {request.cls}: {end_time - start_time} сек.\n")
 
 
-@pytest.fixture(scope='function', autouse=True)
+@pytest.fixture(scope='class', autouse=True)
 def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_email, password=valid_password) -> json:
     """Метод для авторизации на платформе PetFriends и получения auth-key-ключа для отправки запросов. Одновременно
     является и тестируемой функцией (каждый раз при вызове), и setup-фикстурой pytest для передачи в качестве аргумента
@@ -66,39 +66,23 @@ def introspection_of_test(request):
         return f"\n У теста(тестируемой функции) {request.function.__name__} коллекция (тестовый класс) отсутствует.\n"
 
 
-# @pytest.fixture(scope='function', autouse=True)
-# def log_of_test(request, filename='tests/logs/logs.txt'):
-#     start_time = datetime.now()
-#     yield
-#     end_time = datetime.now()
-#     filename = os.path.join(os.path.dirname(__file__), filename)
-#     with open(filename, 'w') as file_object:
-#         file_object.write(f'\nНачало выполнения тестовой функции: {start_time} сек. *')
-#         file_object.write(f'\n\n    - Имя теста (тестируемой функции): {request.function.__name__}.')
-#         file_object.write(f'\n    - Имя коллекции (тестового класса): {request.cls}.')
-#         file_object.write(f'\n    - Имя фикстуры: {request.fixturename}.')
-#         file_object.write(f'\n    - Область видимости фикстуры: {request.scope}.')
-#         file_object.write(f'\n    - Относительный путь к тестовому модулю: {request.module.__name__}.')
-#         file_object.write(f'\n\n        Окончание выполнения тестовой функции: {end_time} сек. **')
-#         file_object.write(f"\n\n            ВСЕГО продолжительность теста {request.function.__name__}: "
-#                           f"{end_time - start_time} сек.\n\n")
+@pytest.fixture(scope='function', autouse=True)
+def log_of_test(request, filename='tests/logs/logs.txt'):
+    start_time = datetime.now()
+    yield
+    end_time = datetime.now()
+    filename = os.path.join(os.path.dirname(__file__), filename)
+    with open(filename, 'a') as file_object:
+        file_object.write(f'\nНачало выполнения тестовой функции: {start_time} сек. *')
+        file_object.write(f'\n\n    - Имя теста (тестируемой функции): {request.function.__name__}.')
+        file_object.write(f'\n    - Имя коллекции (тестового класса): {request.cls}.')
+        file_object.write(f'\n    - Имя фикстуры: {request.fixturename}.')
+        file_object.write(f'\n    - Область видимости фикстуры: {request.scope}.')
+        file_object.write(f'\n    - Относительный путь к тестовому модулю: {request.module.__name__}.')
+        file_object.write(f'\n\n        Окончание выполнения тестовой функции: {end_time} сек. **')
+        file_object.write(f"\n\n            ВСЕГО продолжительность теста {request.function.__name__}: "
+                          f"{end_time - start_time} сек.\n\n")
 
 
 min_python_310_required = pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.9 или '
                                                                                'ниже, выполнение теста отложено.')
-
-
-def log_of_test(func):
-    def wrapper(*args, **kwargs):
-        start_time = datetime.now()
-        func(*args, **kwargs)
-        end_time = datetime.now()
-        total_time = end_time - start_time
-        filename = 'tests/logs/logs.txt'
-        filename = os.path.join(os.path.dirname(__file__), filename)
-        with open(filename, 'w') as file_object:
-            file_object.write(f'\nНачало выполнения тестовой функции: {start_time} сек. *')
-            file_object.write(f'\n\n    - Имя теста (тестируемой функции):.')
-            file_object.write(f'\n    - Продолжительность теста: {total_time} сек.')
-        return func(*args, **kwargs)
-    return wrapper

@@ -33,7 +33,7 @@ class TestClass_PetFriends:
         assert status == 200, 'Запрос выполнен неуспешно'
         assert result['name'] == 'Richard', 'Запрос неверный, карточка питомца не создана'
 
-        return status
+        return result
 
     @pytest.mark.two
     @pytest.mark.create_pet
