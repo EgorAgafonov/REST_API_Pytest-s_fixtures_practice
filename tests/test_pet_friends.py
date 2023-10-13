@@ -124,3 +124,5 @@ class TestClass_PetFriends:
 
         assert status == 200
         assert result['pets'] == []
+
+
