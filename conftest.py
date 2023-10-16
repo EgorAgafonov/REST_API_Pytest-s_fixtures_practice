@@ -7,19 +7,29 @@ from datetime import *
 import json
 from settings import *
 
+filename = 'tests/logs/logs.txt'
+
 
 @pytest.fixture(scope='class', autouse=True)
-def duration_of_collection(request):
+def duration_of_collection(request, filename=filename):
     start_time = datetime.now()
     print(f'\n1/3 START COLLECTION:\nНачало выполнения тестовой коллекции: {start_time} сек.')
+    filename = os.path.join(os.path.dirname(__file__), filename)
+    with open(filename, 'a') as file_object:
+        file_object.write(f'1/3 START COLLECTION:\nНачало выполнения тестовой коллекции: {start_time} сек.')
     yield
     end_time = datetime.now()
     print(f'2/3 END COLLECTION:\nОкончание выполнения тестовой коллекции: {end_time} сек.')
     print(f"3/3 RESULT: Общая продолжительность всех тестов в коллекции {request.cls}: {end_time - start_time} сек.\n")
+    with open(filename, 'a') as file_object:
+        file_object.write(f'\n2/3 END COLLECTION:\nОкончание выполнения тестовой коллекции: {end_time} сек.')
+        file_object.write(f"\n3/3 RESULT:\nОбщая продолжительность всех тестов в коллекции {request.cls}: "
+                          f"{end_time - start_time} сек.\n")
 
 
 @pytest.fixture(scope='class', autouse=True)
-def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_email, password=valid_password) -> json:
+def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_email, password=valid_password,
+                filename=filename) -> json:
     """Метод для авторизации на платформе PetFriends и получения auth-key-ключа для отправки запросов. Одновременно
     является и тестируемой функцией (каждый раз при вызове), и setup-фикстурой pytest для передачи в качестве аргумента
     в тестируемые функции (каждый запрос требует отправлять в заголовке auth_key). Функция возвращает строковое значение
@@ -38,6 +48,10 @@ def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_emai
     assert 'key' in result
 
     print(f'\n--- Запрос api-ключа успешно выполнен, пользователь авторизован. ---')
+    filename = os.path.join(os.path.dirname(__file__), filename)
+    with open(filename, 'a') as file_object:
+        file_object.write(f'\n\n\n--- Запрос api-ключа успешно выполнен, пользователь авторизован. ---\n\n')
+
     return result['key']
 
 
@@ -74,13 +88,13 @@ def log_of_test(request, filename='tests/logs/logs.txt'):
     filename = os.path.join(os.path.dirname(__file__), filename)
     with open(filename, 'a') as file_object:
         file_object.write(f'\nНачало выполнения тестовой функции: {start_time} сек. *')
-        file_object.write(f'\n\n    - Имя теста (тестируемой функции): {request.function.__name__}.')
-        file_object.write(f'\n    - Имя коллекции (тестового класса): {request.cls}.')
-        file_object.write(f'\n    - Имя фикстуры: {request.fixturename}.')
-        file_object.write(f'\n    - Область видимости фикстуры: {request.scope}.')
-        file_object.write(f'\n    - Относительный путь к тестовому модулю: {request.module.__name__}.')
-        file_object.write(f'\n\n        Окончание выполнения тестовой функции: {end_time} сек. **')
-        file_object.write(f"\n\n            ВСЕГО продолжительность теста {request.function.__name__}: "
+        file_object.write(f'\n- Имя теста (тестируемой функции): {request.function.__name__}.')
+        file_object.write(f'\n- Имя коллекции (тестового класса): {request.cls}.')
+        file_object.write(f'\n- Имя фикстуры: {request.fixturename}.')
+        file_object.write(f'\n- Область видимости фикстуры: {request.scope}.')
+        file_object.write(f'\n- Относительный путь к тестовому модулю: {request.module.__name__}.')
+        file_object.write(f'\nОкончание выполнения тестовой функции: {end_time} сек. **')
+        file_object.write(f"\nИТОГО продолжительность теста {request.function.__name__}: "
                           f"{end_time - start_time} сек.\n\n")
 
 
