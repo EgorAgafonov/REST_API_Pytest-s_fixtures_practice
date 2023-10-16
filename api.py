@@ -92,11 +92,9 @@ class PetFriends:
         result = my_pets.json()
 
         while len(result['pets']) > 0:
-            delete_pets = requests.delete(self.base_url + '/api/pets/' + result['pets'][0]['id'], headers=headers)
+            delete_pet = requests.delete(self.base_url + '/api/pets/' + result['pets'][0]['id'], headers=headers)
             my_pets = requests.get(self.base_url + '/api/pets', headers=headers, params=filters)
-            status = delete_pets.status_code
+            status = delete_pet.status_code
             result = my_pets.json()
 
         return status, result
-
-
