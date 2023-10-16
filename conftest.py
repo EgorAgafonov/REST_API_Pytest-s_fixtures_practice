@@ -1,11 +1,10 @@
 import sys
-
 import pytest
-from pytest import ExitCode
 import requests
 from datetime import *
 import json
 from settings import *
+
 
 filename = 'tests/logs/logs.txt'
 
