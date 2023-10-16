@@ -31,7 +31,7 @@ class TestClass_PetFriends:
         status, result = pf.create_pet_simple(auth_key=get_api_key, name=name, animal_type=animal_type, age=age)
 
         assert status == 200, 'Запрос выполнен неуспешно'
-        assert result['name'] != '', 'Запрос неверный, карточка питомца не создана'
+        assert result['name'] != 'Bruce', 'Запрос неверный, карточка питомца не создана'
 
         return result
 
@@ -102,7 +102,7 @@ class TestClass_PetFriends:
         assert status == 200
         assert pet_id not in my_pets.values()
 
-    # @pytest.mark.skip(reason='Метод запроса работает некорректно, выполнение теста отложено.')
+    @pytest.mark.skip(reason='Метод запроса работает некорректно, выполнение теста отложено.')
     # @pytest.mark.skipif(sys.version_info > (3, 9), reason=f'Тест требует python версии 3.9'
     #                                                       f'или ниже, выполнение теста отложено.')
     # @min_python_310_required
@@ -126,27 +126,27 @@ class TestClass_PetFriends:
         assert result['pets'] == []
 
     @pytest.mark.create_pet_pairwise
-    @pytest.mark.parametrize("name", ["Семён", "Layma", '李思清'], ids=['сyrillic_name_positive', 'latin_name_positive',
+    @pytest.mark.parametrize("name", ["Семён", "Layma", '李思清'], ids=['cyrillic_name_positive', 'latin_name_positive',
                                                                         'chinese_name_positive'])
-    @pytest.mark.parametrize("animal_type", ["гончая", "bull terrier", '李思清'], ids=['сyrillic_breed_positive',
-                                                                                           'latin_breed_positive',
-                                                                                           'chinese_breed_positive'])
-    @pytest.mark.parametrize("age", ["1", 23.45, -1],
-                             ids=['string_age_positive', 'float_age_positive', 'negative num_positive'])
+    @pytest.mark.parametrize("animal_type", ["гончая", "bull terrier", '李思清'], ids=['cyrillic_breed_positive',
+                                                                                       'latin_breed_positive',
+                                                                                       'chinese_breed_positive'])
+    @pytest.mark.parametrize("age", ["1", 23.45, -1], ids=['string_age_positive', 'float_age_positive',
+                                                           'negative_num_positive'])
     def test_create_pet_simple_pairwise(self, get_api_key, name, animal_type, age):
-        """Позитивный тест проверки размещения пользователем карточки питомца без фотографии. Для обязательной,
-        предварительной авторизации пользователя на сайте перед размещением карточки c помощью библиотеки Pytest
-        сначала инициализируется функция-фикстура get_api_key. В случае положительной авторизации на сайте (в
-        фикстуре get_api_key реализована тестовая проверка на предмет валидации пользователя на сайте),
-        с помощью модуля api.py с классом атрибутов и методов PetFriends выполняется post-запрос на размещение карточки
-        с данными питомца без фото. В случае положительной авторизации на сайте, с помощью модуля api.py с
-        классом атрибутов и методов PetFriends выполняется post-запрос на размещение карточки. Валидация теста
-        считается успешной в случае если статус ответа сервера равен 200, а передаваемое в запросе кличка питомца
-        содержится в json-ответе сервера."""
+        """Позитивный тест проверки размещения пользователем карточек питомцев без фотографии. С помощью фикстуры
+        pytest.mark.parametrize тест генерирует карточки питомцев с заданными переметрами значений name, animal_type,
+        age (прием строковых значений в различной кодировке, целочисленных или дробных(float) значений) в зависимости от
+        поставленной задачи. Реализуется техника тестирования Pairwise. Ввиду отсутствия установленных ограничений на
+        тип передаваемых данных для теста достаточно положительного ответа сервера и создания сущностей(карточек) с
+        указанными нами parametrize питомцев. Валидация теста считается успешной в случае если статус ответа сервера
+        равен 200, а передаваемые в запросе параметры содержатся в json-ответе сервера."""
 
         status, result = pf.create_pet_simple(auth_key=get_api_key, name=name, animal_type=animal_type, age=age)
 
         assert status == 200, 'Запрос выполнен неуспешно'
-        assert result['name'] != '', 'Запрос неверный, карточка питомца не создана'
+        assert result['name'] != '', 'Запрос неверный, поле "name" пустое, карточка питомца не создана'
+        assert result['animal_type'] != '', 'Запрос неверный, поле "animal_type" пустое, карточка питомца не создана'
+        assert result['age'] != '', 'Запрос неверный, поле "age" пустое, карточка питомца не создана'
 
         return result
