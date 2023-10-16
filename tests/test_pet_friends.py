@@ -125,8 +125,6 @@ class TestClass_PetFriends:
         assert status == 200
         assert result['pets'] == []
 
-
-
     @pytest.mark.create_pet_pairwise
     @pytest.mark.parametrize("name", ["Семён", "Layma", '李思清'], ids=['сyrillic_name_positive', 'latin_name_positive',
                                                                         'chinese_name_positive'])

@@ -14,16 +14,17 @@ def duration_of_collection(request, filename=filename):
     start_time = datetime.now()
     print(f'\n1/3 START COLLECTION:\nНачало выполнения тестовой коллекции: {start_time} сек.')
     filename = os.path.join(os.path.dirname(__file__), filename)
-    with open(filename, 'a') as file_object:
+    with open(filename, 'w') as file_object:
         file_object.write(f'1/3 START COLLECTION:\nНачало выполнения тестовой коллекции: {start_time} сек.')
     yield
     end_time = datetime.now()
-    print(f'2/3 END COLLECTION:\nОкончание выполнения тестовой коллекции: {end_time} сек.')
-    print(f"3/3 RESULT: Общая продолжительность всех тестов в коллекции {request.cls}: {end_time - start_time} сек.\n")
+    print(f'2/3 END COLLECTION:\nОкончание выполнения тестовой коллекции: {end_time} сек.\n')
+    print(f"3/3 RESULT:\nОбщая продолжительность всех тестов в коллекции {request.cls}: {end_time - start_time} "
+          f"сек.\n\n\n")
     with open(filename, 'a') as file_object:
-        file_object.write(f'\n2/3 END COLLECTION:\nОкончание выполнения тестовой коллекции: {end_time} сек.')
+        file_object.write(f'\n2/3 END COLLECTION:\nОкончание выполнения тестовой коллекции: {end_time} сек.\n')
         file_object.write(f"\n3/3 RESULT:\nОбщая продолжительность всех тестов в коллекции {request.cls}: "
-                          f"{end_time - start_time} сек.\n\n")
+                          f"{end_time - start_time} сек.\n\n\n")
 
 
 @pytest.fixture(scope='class', autouse=True)
