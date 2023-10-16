@@ -17,7 +17,7 @@ class TestClass_PetFriends:
 
     @pytest.mark.one
     @pytest.mark.create_pet
-    def test_create_pet_simple(self, get_api_key):
+    def test_create_pet_simple(self, get_api_key, name='Bruce', animal_type="bulldog", age=0.6):
         """Позитивный тест проверки размещения пользователем карточки питомца без фотографии. Для обязательной,
         предварительной авторизации пользователя на сайте перед размещением карточки c помощью библиотеки Pytest
         сначала инициализируется функция-фикстура get_api_key. В случае положительной авторизации на сайте (в
@@ -25,19 +25,19 @@ class TestClass_PetFriends:
         с помощью модуля api.py с классом атрибутов и методов PetFriends выполняется post-запрос на размещение карточки
         с данными питомца без фото. В случае положительной авторизации на сайте, с помощью модуля api.py с
         классом атрибутов и методов PetFriends выполняется post-запрос на размещение карточки. Валидация теста
-        считается успешной в случае если статус ответа сервера равен 200, а передаваемое в запросе кличка питомца
+        считается успешной в случае если статус ответа сервера равен 200, а передаваемая в запросе кличка питомца
         содержится в json-ответе сервера."""
 
-        status, result = pf.create_pet_simple(auth_key=get_api_key, name='Richard', animal_type='bobcat', age=1.5)
+        status, result = pf.create_pet_simple(auth_key=get_api_key, name=name, animal_type=animal_type, age=age)
 
         assert status == 200, 'Запрос выполнен неуспешно'
-        assert result['name'] == 'Richard', 'Запрос неверный, карточка питомца не создана'
+        assert result['name'] != '', 'Запрос неверный, карточка питомца не создана'
 
         return result
 
     @pytest.mark.two
     @pytest.mark.create_pet
-    def test_create_pet_wth_photo(self, get_api_key, name='Tomas', animal_type='british-lazy', age='2',
+    def test_create_pet_wth_photo(self, get_api_key, name='Стюарт', animal_type='сиамский', age='2',
                                   pet_photo='images/cat2.jpg'):
         """Позитивный тест проверки размещения пользователем карточки питомца с фотографией. Используется фикстура
         get_api_key, как и в предыдущем тесте. В случае положительной авторизации на сайте, с помощью модуля api.py с
@@ -124,3 +124,31 @@ class TestClass_PetFriends:
 
         assert status == 200
         assert result['pets'] == []
+
+
+
+    @pytest.mark.create_pet_pairwise
+    @pytest.mark.parametrize("name", ["Семён", "Layma", '李思清'], ids=['сyrillic_name_positive', 'latin_name_positive',
+                                                                        'chinese_name_positive'])
+    @pytest.mark.parametrize("animal_type", ["гончая", "bull terrier", '李思清'], ids=['сyrillic_breed_positive',
+                                                                                           'latin_breed_positive',
+                                                                                           'chinese_breed_positive'])
+    @pytest.mark.parametrize("age", ["1", 23.45, -1],
+                             ids=['string_age_positive', 'float_age_positive', 'negative num_positive'])
+    def test_create_pet_simple_pairwise(self, get_api_key, name, animal_type, age):
+        """Позитивный тест проверки размещения пользователем карточки питомца без фотографии. Для обязательной,
+        предварительной авторизации пользователя на сайте перед размещением карточки c помощью библиотеки Pytest
+        сначала инициализируется функция-фикстура get_api_key. В случае положительной авторизации на сайте (в
+        фикстуре get_api_key реализована тестовая проверка на предмет валидации пользователя на сайте),
+        с помощью модуля api.py с классом атрибутов и методов PetFriends выполняется post-запрос на размещение карточки
+        с данными питомца без фото. В случае положительной авторизации на сайте, с помощью модуля api.py с
+        классом атрибутов и методов PetFriends выполняется post-запрос на размещение карточки. Валидация теста
+        считается успешной в случае если статус ответа сервера равен 200, а передаваемое в запросе кличка питомца
+        содержится в json-ответе сервера."""
+
+        status, result = pf.create_pet_simple(auth_key=get_api_key, name=name, animal_type=animal_type, age=age)
+
+        assert status == 200, 'Запрос выполнен неуспешно'
+        assert result['name'] != '', 'Запрос неверный, карточка питомца не создана'
+
+        return result

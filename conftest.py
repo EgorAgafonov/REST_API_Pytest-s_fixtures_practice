@@ -9,7 +9,7 @@ from settings import *
 filename = 'tests/logs/logs.txt'
 
 
-@pytest.fixture(scope='class', autouse=False)
+@pytest.fixture(scope='class', autouse=True)
 def duration_of_collection(request, filename=filename):
     start_time = datetime.now()
     print(f'\n1/3 START COLLECTION:\nНачало выполнения тестовой коллекции: {start_time} сек.')
@@ -23,10 +23,10 @@ def duration_of_collection(request, filename=filename):
     with open(filename, 'a') as file_object:
         file_object.write(f'\n2/3 END COLLECTION:\nОкончание выполнения тестовой коллекции: {end_time} сек.')
         file_object.write(f"\n3/3 RESULT:\nОбщая продолжительность всех тестов в коллекции {request.cls}: "
-                          f"{end_time - start_time} сек.\n")
+                          f"{end_time - start_time} сек.\n\n")
 
 
-@pytest.fixture(scope='class', autouse=False)
+@pytest.fixture(scope='class', autouse=True)
 def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_email, password=valid_password,
                 filename=filename) -> json:
     """Метод для авторизации на платформе PetFriends и получения auth-key-ключа для отправки запросов. Одновременно
@@ -54,7 +54,7 @@ def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_emai
     return result['key']
 
 
-@pytest.fixture(scope='function', autouse=False)
+@pytest.fixture(scope='function', autouse=True)
 def duration_of_test(request):
     start_time = datetime.now()
     print(f'\n* Начало выполнения тестовой функции: {start_time} сек. *')
@@ -64,7 +64,7 @@ def duration_of_test(request):
     print(f"    ВСЕГО продолжительность теста {request.function.__name__}: {end_time - start_time} сек.\n")
 
 
-@pytest.fixture(scope='function', autouse=False)
+@pytest.fixture(scope='function', autouse=True)
 def introspection_of_test(request):
     yield
     print(f'\n- Имя теста (тестируемой функции): {request.function.__name__}.')
@@ -79,7 +79,7 @@ def introspection_of_test(request):
         return f"\n У теста(тестируемой функции) {request.function.__name__} коллекция (тестовый класс) отсутствует.\n"
 
 
-@pytest.fixture(scope='function', autouse=False)
+@pytest.fixture(scope='function', autouse=True)
 def log_of_test(request, filename='tests/logs/logs.txt'):
     start_time = datetime.now()
     yield
