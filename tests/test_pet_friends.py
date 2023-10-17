@@ -1,13 +1,5 @@
 from api import PetFriends
-from settings import valid_email, valid_password
-import os
-import requests
-import pytest
-import json
 from conftest import *
-from pytest import *
-import time
-import sys
 
 pf = PetFriends()
 

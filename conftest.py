@@ -27,7 +27,7 @@ def duration_of_collection(request, filename=filename):
                           f"{end_time - start_time} сек.\n\n\n")
 
 
-@pytest.fixture(scope='function', autouse=True)
+@pytest.fixture(scope='class', autouse=True)
 def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_email, password=valid_password,
                 filename=filename) -> json:
     """Метод для авторизации на платформе PetFriends и получения auth-key-ключа для отправки запросов. Одновременно
