@@ -127,13 +127,10 @@ class TestClass_PetFriends:
 
     # @pytest.mark.skip(reason='ВНИМАНИЕ! Тест генерирует единовременно двадцать семь тест-кейсов(карточек питомцев), '
     #                          'исполнение в коллекции инициировать по необходимости.')
-    @pytest.mark.parametrize("name", ["Семён", "Layma", '李思清'], ids=['cyrillic_name_positive', 'latin_name_positive',
-                                                                        'chinese_name_positive'])
-    @pytest.mark.parametrize("animal_type", ["гончая", "bull terrier", '李思清'], ids=['cyrillic_breed_positive',
-                                                                                       'latin_breed_positive',
-                                                                                       'chinese_breed_positive'])
-    @pytest.mark.parametrize("age", ["1", 23.45, -1], ids=['string_age_positive', 'float_age_positive',
-                                                           'negative_num_positive'])
+    @pytest.mark.parametrize("name", ["Семён", "Layma", '李思清'], ids=['cyrillic_name', 'latin_name', 'chinese_name'])
+    @pytest.mark.parametrize("animal_type", ["гончая", "bull terrier", '李思清'],
+                             ids=['cyrillic_breed', 'latin_breed', 'chinese_breed'])
+    @pytest.mark.parametrize("age", ["1", 23.45, -1], ids=['string_age', 'float_age', 'negative_age'])
     def test_create_pet_simple_pairwise(self, get_api_key, name, animal_type, age):
         """Позитивный тест проверки размещения пользователем карточек питомцев без фотографии. С помощью фикстуры
         pytest.mark.parametrize тест генерирует карточки питомцев с заданными параметрами значений name, animal_type,
@@ -145,9 +142,14 @@ class TestClass_PetFriends:
 
         status, result = pf.create_pet_simple(auth_key=get_api_key, name=name, animal_type=animal_type, age=age)
 
-        assert status == 200, 'Запрос выполнен неуспешно'
-        assert result['name'] != '', 'Запрос неверный, поле "name" пустое, карточка питомца не создана'
-        assert result['animal_type'] != '', 'Запрос неверный, поле "animal_type" пустое, карточка питомца не создана'
-        assert result['age'] != '', 'Запрос неверный, поле "age" пустое, карточка питомца не создана'
+        if float(result['age']) <= 0:
+            raise Exception("f\nОбнаружена ошибка - возможность создания карточки питомца с отрицательным значением "
+                            "возраста.\nЗанести баг в баг-трэкинговую систему и создать баг-репорт.")
+        else:
+            assert status == 200, 'Запрос выполнен неуспешно'
+            assert result['name'] != '', 'Запрос неверный, поле "name" пустое, карточка питомца не создана'
+            assert result['animal_type'] != '', 'Запрос неверный, поле "animal_type" пустое, ' \
+                                                'карточка питомца не создана'
+            assert result['age'] != '', 'Запрос неверный, поле "age" пустое, карточка питомца не создана'
 
-        return result
+        print(f"\nТестируемые значения:\nname: {name}, animal_type: {animal_type}, age: {age}.")
