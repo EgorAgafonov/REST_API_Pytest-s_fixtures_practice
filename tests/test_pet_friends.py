@@ -31,7 +31,7 @@ class TestClass_PetFriends:
         status, result = pf.create_pet_simple(auth_key=get_api_key, name=name, animal_type=animal_type, age=age)
 
         assert status == 200, 'Запрос выполнен неуспешно'
-        assert result['name'] != 'Bruce', 'Запрос неверный, карточка питомца не создана'
+        assert result['name'] == 'Bruce', 'Запрос неверный, карточка питомца не создана'
 
         return result
 
@@ -102,7 +102,7 @@ class TestClass_PetFriends:
         assert status == 200
         assert pet_id not in my_pets.values()
 
-    @pytest.mark.skip(reason='Метод запроса работает некорректно, выполнение теста отложено.')
+    # @pytest.mark.skip(reason='Метод запроса работает некорректно, выполнение теста отложено.')
     # @pytest.mark.skipif(sys.version_info > (3, 9), reason=f'Тест требует python версии 3.9'
     #                                                       f'или ниже, выполнение теста отложено.')
     # @min_python_310_required
@@ -125,7 +125,8 @@ class TestClass_PetFriends:
         assert status == 200
         assert result['pets'] == []
 
-    @pytest.mark.create_pet_pairwise
+    # @pytest.mark.skip(reason='ВНИМАНИЕ! Тест генерирует единовременно двадцать семь тест-кейсов(карточек питомцев), '
+    #                          'исполнение в коллекции инициировать по необходимости.')
     @pytest.mark.parametrize("name", ["Семён", "Layma", '李思清'], ids=['cyrillic_name_positive', 'latin_name_positive',
                                                                         'chinese_name_positive'])
     @pytest.mark.parametrize("animal_type", ["гончая", "bull terrier", '李思清'], ids=['cyrillic_breed_positive',
@@ -135,10 +136,10 @@ class TestClass_PetFriends:
                                                            'negative_num_positive'])
     def test_create_pet_simple_pairwise(self, get_api_key, name, animal_type, age):
         """Позитивный тест проверки размещения пользователем карточек питомцев без фотографии. С помощью фикстуры
-        pytest.mark.parametrize тест генерирует карточки питомцев с заданными переметрами значений name, animal_type,
+        pytest.mark.parametrize тест генерирует карточки питомцев с заданными параметрами значений name, animal_type,
         age (прием строковых значений в различной кодировке, целочисленных или дробных(float) значений) в зависимости от
         поставленной задачи. Реализуется техника тестирования Pairwise. Ввиду отсутствия установленных ограничений на
-        тип передаваемых данных для теста достаточно положительного ответа сервера и создания сущностей(карточек) с
+        тип передаваемых данных, для теста достаточно положительного ответа сервера и создания сущностей(карточек) с
         указанными нами parametrize питомцев. Валидация теста считается успешной в случае если статус ответа сервера
         равен 200, а передаваемые в запросе параметры содержатся в json-ответе сервера."""
 
