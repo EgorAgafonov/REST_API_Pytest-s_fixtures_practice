@@ -119,3 +119,6 @@ def special_chars():
 
 def digits():
     return '1234567890'
+
+def latin_chars():
+    return 'abcdefghijklmnopqrstwxyz'

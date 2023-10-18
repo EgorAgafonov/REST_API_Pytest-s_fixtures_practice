@@ -127,9 +127,9 @@ class TestClass_PetFriends:
         assert status == 200
         assert pet_id not in my_pets.values()
 
-    @pytest.mark.skip(reason='Метод запроса работает некорректно, выполнение теста отложено.')
-    @pytest.mark.skipif(sys.version_info > (3, 9), reason=f'Тест требует python версии 3.9'
-                                                          f'или ниже, выполнение теста отложено.')
+    # @pytest.mark.skip(reason='Метод запроса работает некорректно, выполнение теста отложено.')
+    # @pytest.mark.skipif(sys.version_info > (3, 9), reason=f'Тест требует python версии 3.9'
+    #                                                       f'или ниже, выполнение теста отложено.')
     # @min_python_310_required
     # @pytest.mark.xfail(sys.platform == 'win32', reason='Возможны сбои в работе и падение теста на платформе win32')
     # @pytest.mark.xfail(raises=UnboundLocalError, reason="В случае отсутствия карточки(чек) питомцев у пользователя"
@@ -150,11 +150,21 @@ class TestClass_PetFriends:
         assert status == 200
         assert result['pets'] == []
 
-    @pytest.mark.skip(reason='ВНИМАНИЕ! Тест генерирует единовременно 27 тест-кейсов(карточек питомцев), '
-                             'исполнение в коллекции инициировать по необходимости.')
-    @pytest.mark.parametrize("name", ["Семён", "Layma", '李思清'], ids=['cyrillic_name', 'latin_name', 'chinese_name'])
-    @pytest.mark.parametrize("animal_type", ["гончая", "bull terrier", '李思清'],
-                             ids=['cyrillic_breed', 'latin_breed', 'chinese_breed'])
+    # @pytest.mark.skip(reason='ВНИМАНИЕ! Тест генерирует единовременно 27 тест-кейсов(карточек питомцев), '
+    #                          'исполнение в коллекции инициировать по необходимости.')
+    @pytest.mark.parametrize("name", [russian_chars(),
+                                      russian_chars().upper(),
+                                      strings_generator(255),
+                                      chinese_chars(),
+                                      latin_chars()], ids=['cyrillic name', 'CYRILLIC NAME', '255 symbols name',
+                                                           'chinese name', 'latin name'])
+    @pytest.mark.parametrize("animal_type", [russian_chars(),
+                                             russian_chars().upper(),
+                                             strings_generator(255),
+                                             chinese_chars(),
+                                             latin_chars()],
+                             ids=['cyrillic breed', 'CYRILLIC BREED', '255 symbols breed',
+                                  'chinese breed', 'latin breed'])
     @pytest.mark.parametrize("age", ["1", 23.45, -1], ids=['string_age', 'float_age', 'negative_age'])
     def test_create_pet_simple_pairwise(self, get_api_key, name, animal_type, age):
         """Позитивный тест проверки размещения пользователем карточек питомцев без фотографии. С помощью фикстуры
@@ -179,3 +189,24 @@ class TestClass_PetFriends:
             assert result['age'] != '', 'Запрос неверный, поле "age" пустое, карточка питомца не создана'
 
         print(f"\nТестируемые значения:\nname: {name}, animal_type: {animal_type}, age: {age}.")
+
+    @pytest.mark.parametrize("name", [''], ids=['empty'])
+    @pytest.mark.parametrize("animal_type", [''], ids=['empty'])
+    @pytest.mark.parametrize("age", ['', '-1', '0', '100', '1.5', '2147483647', '2147483648', special_chars(),
+                                     russian_chars(), russian_chars().upper(), chinese_chars()],
+                             ids=['empty', 'negative', 'zero', 'greater than max', 'float', 'int_max',
+                                  'int_max + 1', 'specials', 'russian', 'RUSSIAN', 'chinese'])
+    def test_add_new_pet_simple_negative(self, get_api_key, name, animal_type, age):
+        """Негативный тест проверки размещения пользователем карточек питомцев без фотографии. Отличие от предыдущего
+        теста в том, что в запросе формируются только невалидные параметры значений name, animal_type, age. Валидация
+        негативного теста считается успешной, если статус ответа сервера не равен 200."""
+
+        status, result = pf.create_pet_simple(auth_key=get_api_key, name=name, animal_type=animal_type, age=age)
+
+        if status == 200:
+            raise Exception('\nОбнаружена ошибка - возможность создания карточки питомца с невалидными значениями полей'
+                            'name, animal_type, age.\nЗанести баг в баг-трэкинговую систему и создать баг-репорт.')
+
+        assert status in range(400, 600)
+
+
