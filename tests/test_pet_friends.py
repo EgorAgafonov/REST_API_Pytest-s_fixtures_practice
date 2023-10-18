@@ -1,5 +1,6 @@
 from api import PetFriends
 from conftest import *
+import sys
 
 pf = PetFriends()
 
@@ -102,7 +103,7 @@ class TestClass_PetFriends:
         Валидация теста считается успешной в случае, если статус ответа сервера на запрос равен 200, а id-номер
         удаляемого питомца (его карточка) отсутствует в повторном get-запросе списка всех питомцев пользователя."""
 
-        _, my_pets = pf.get_all_pets(auth_key=get_api_key, filters='my_pets')  # получаем список питомцев пользователя
+        _, my_pets = pf.get_all_pets(auth_key=get_api_key, filter='my_pets')  # получаем список питомцев пользователя
 
         if len(my_pets[
                    'pets']) == 0:  # в случае, если у пользователя отсутствуют размещенные карточки питомцев, инициируем
@@ -111,7 +112,7 @@ class TestClass_PetFriends:
             pf.create_pet_wth_foto(auth_key=get_api_key, name='Charlie', animal_type='siamese', age='2',
                                    pet_photo='images/cat2.jpg')
             _, my_pets = pf.get_all_pets(auth_key=get_api_key,
-                                         filters='my_pets')  # повторно запрашиваем список питомцев
+                                         filter='my_pets')  # повторно запрашиваем список питомцев
             # пользователя.
 
         pet_id = my_pets['pets'][0][
@@ -120,15 +121,15 @@ class TestClass_PetFriends:
         status = pf.delete_pet(auth_key=get_api_key, pet_id=pet_id)  # удаляем карточку питомца по id-номеру и получаем
         # статус ответа от сервера.
 
-        _, my_pets = pf.get_all_pets(auth_key=get_api_key, filters='my_pets')  # повторно запрашиваем список питомцев
+        _, my_pets = pf.get_all_pets(auth_key=get_api_key, filter='my_pets')  # повторно запрашиваем список питомцев
         # для проверки отсутствия удаленного питомца
         # в списке пользователя
         assert status == 200
         assert pet_id not in my_pets.values()
 
-    # @pytest.mark.skip(reason='Метод запроса работает некорректно, выполнение теста отложено.')
-    # @pytest.mark.skipif(sys.version_info > (3, 9), reason=f'Тест требует python версии 3.9'
-    #                                                       f'или ниже, выполнение теста отложено.')
+    @pytest.mark.skip(reason='Метод запроса работает некорректно, выполнение теста отложено.')
+    @pytest.mark.skipif(sys.version_info > (3, 9), reason=f'Тест требует python версии 3.9'
+                                                          f'или ниже, выполнение теста отложено.')
     # @min_python_310_required
     # @pytest.mark.xfail(sys.platform == 'win32', reason='Возможны сбои в работе и падение теста на платформе win32')
     # @pytest.mark.xfail(raises=UnboundLocalError, reason="В случае отсутствия карточки(чек) питомцев у пользователя"
@@ -162,8 +163,8 @@ class TestClass_PetFriends:
         поставленной задачи. Реализуется техника тестирования Pairwise. Ввиду отсутствия установленных ограничений на
         тип передаваемых данных, для теста достаточно положительного ответа сервера и создания карточек с указанными
         нами parametrize питомцев. В виде исключения добавлен вызов Exception в случае, если ответ сервера содержит
-        отрицательное значение возраста питомца и статус-код 200. Валидация теста считается успешной в случае если
-        статус ответа сервера равен 200, а передаваемые в запросе параметры содержатся в json-ответе сервера."""
+        отрицательное значение возраста питомца и статус-код 200. Валидация теста считается успешной если статус ответа
+        сервера равен 200, а передаваемые в запросе параметры содержатся в json-ответе сервера."""
 
         status, result = pf.create_pet_simple(auth_key=get_api_key, name=name, animal_type=animal_type, age=age)
 

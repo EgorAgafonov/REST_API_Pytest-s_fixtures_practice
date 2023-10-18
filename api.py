@@ -1,9 +1,5 @@
 import json
-import sys
-import pytest
 import requests
-from conftest import get_api_key
-from settings import valid_email, valid_password
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 

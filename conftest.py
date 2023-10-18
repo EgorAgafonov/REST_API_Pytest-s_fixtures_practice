@@ -116,5 +116,6 @@ def chinese_chars():
 def special_chars():
     return '|\\/!@#$%^&*()-_=+`~?"№;:[]{}'
 
+
 def digits():
     return '1234567890'
