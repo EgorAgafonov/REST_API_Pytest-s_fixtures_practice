@@ -46,9 +46,9 @@ class TestClass_PetFriends:
         assert result['pet_photo'] != '', 'Запрос неверный, карточка питомца с фото не создана'
 
     @pytest.mark.three
-    @pytest.mark.get_info
+    @pytest.mark.get_info_valid
     @pytest.mark.parametrize('filters', ['', 'my_pets'], ids=['empty string', 'only my pets'])
-    def test_getAllPets(self, get_api_key, filters):
+    def test_getAllPets_valid_filter(self, get_api_key, filters):
         """Позитивный тест проверки запроса размещенных пользователем карточек питомцев. Используется фикстура
         get_api_key, как и в предыдущем тесте. В случае положительной авторизации на сайте, с помощью модуля api.py с
         классом атрибутов и методов PetFriends выполняется get-запрос на предоставление всех карточек питомцев,
@@ -61,6 +61,28 @@ class TestClass_PetFriends:
 
         assert status == 200, 'Запрос выполнен неуспешно'
         assert len(result.get('pets')) > 0, 'Количество питомцев не соответствует ожиданиям'
+
+        return status
+
+    @pytest.mark.three
+    @pytest.mark.get_info_invalid
+    @pytest.mark.parametrize('filters', ['', 'my_pets', strings_generator(255), strings_generator(1001)],
+                             ids=['empty string', 'only my pets', '255 symbols', 'more than 1000 symbols'])
+    def test_getAllPets_invalid_filter(self, get_api_key, filters):
+        """Негативный тест проверки запроса размещенных пользователем карточек питомцев. Используется фикстура
+        get_api_key, как и в предыдущем тесте. В случае положительной авторизации на сайте, с помощью модуля api.py с
+        классом атрибутов и методов PetFriends выполняется get-запрос на предоставление всех карточек питомцев,
+        созданных пользователем. В параметрах запроса передаётся необходимое значение фильтра - 'my_pets'. Валидация
+        теста считается успешной в случае, если статус ответа сервера равен 200, а количество полученных карточек
+        питомцев (элементов списка в json-словаре) больше 0. Использование фикстуры get_api_key позволяет избежать
+        многострочного кода в тестовом наборе (коллекции), делает код более лаконичным."""
+
+        status, result = pf.get_all_pets(auth_key=get_api_key, filters=filters)
+
+        assert status == 200, 'Запрос выполнен неуспешно'
+        assert len(result.get('pets')) > 0, 'Количество питомцев не соответствует ожиданиям'
+
+        return status
 
     @pytest.mark.four
     @pytest.mark.delete_pet

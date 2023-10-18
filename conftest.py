@@ -5,7 +5,6 @@ from datetime import *
 import json
 from settings import *
 
-
 filename = 'tests/logs/logs.txt'
 
 
@@ -100,3 +99,7 @@ def log_of_test(request, filename='tests/logs/logs.txt'):
 
 min_python_310_required = pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.9 или '
                                                                                'ниже, выполнение теста отложено.')
+
+
+def strings_generator(n):
+    return "x" * n
