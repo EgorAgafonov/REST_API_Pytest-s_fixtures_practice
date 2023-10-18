@@ -51,16 +51,16 @@ class PetFriends:
             result = response.text
         return status, result
 
-    def get_all_pets(self, auth_key, filters: str):
+    def get_all_pets(self, auth_key, filter: str):
         """Метод позволяет получить список питомцев, добавленных пользователем, либо всех питомцев, размещенных другими
         пользователями (в зависимости от значения параметра filters, указанного в запросе). Возвращает код состояния
         ответа на запрос и массив в виде списка карточек питомцев в формате JSON."""
 
         headers = {'auth_key': auth_key}
-        filters = {'filter': filters}
+        filter = {'filter': filter}
 
         response = requests.get(self.base_url + '/api/pets',
-                                headers=headers, params=filters)
+                                headers=headers, params=filter)
 
         status = response.status_code
         result = ""
