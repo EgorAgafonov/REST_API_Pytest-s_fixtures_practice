@@ -45,8 +45,8 @@ class TestClass_PetFriends:
         assert status == 200, 'Запрос отклонен, ошибка параметров запроса.'
         assert result['pet_photo'] != '', 'Запрос отклонен, карточка питомца с фото не создана'
 
-    @pytest.mark.skip(reason='ВНИМАНИЕ! Тест генерирует единовременно 50 тест-кейсов(карточек питомцев), '
-                             'исполнение в коллекции инициировать по необходимости.')
+    # @pytest.mark.skip(reason='ВНИМАНИЕ! Тест генерирует единовременно 50 тест-кейсов(карточек питомцев), '
+    #                          'исполнение в коллекции инициировать по необходимости.')
     @pytest.mark.parametrize("name", [russian_chars(),
                                       russian_chars().upper(),
                                       strings_generator(255),
@@ -85,8 +85,8 @@ class TestClass_PetFriends:
 
         print(f"\nТестируемые значения:\nname: {name}, animal_type: {animal_type}, age: {age}.")
 
-    @pytest.mark.skip(reason='ВНИМАНИЕ! Тест генерирует единовременно 11 тест-кейсов(карточек питомцев), '
-                             'исполнение в коллекции инициировать по необходимости.')
+    # @pytest.mark.skip(reason='ВНИМАНИЕ! Тест генерирует единовременно 11 тест-кейсов(карточек питомцев), '
+    #                          'исполнение в коллекции инициировать по необходимости.')
     @pytest.mark.parametrize("name", [''], ids=['empty'])
     @pytest.mark.parametrize("animal_type", [''], ids=['empty'])
     @pytest.mark.parametrize("age", ['', '-1', '0', '100', '1.5', '2147483647', '2147483648', special_chars(),
