@@ -62,5 +62,5 @@ class TestClass_PetFriends:
 
         status, result = pf.delete_all_my_pets(auth_key=get_api_key)
 
-        assert status == 200
+        assert status == 200, "Проверьте наличие размещенных карточек питомцев (нечего удалять!)"
         assert result['pets'] == []
