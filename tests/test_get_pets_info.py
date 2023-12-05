@@ -50,7 +50,7 @@ class TestClass_PetFriends:
         status, result = pf.get_all_pets(auth_key=get_api_key, filter=filter)
 
         if status == 200:
-            raise Exception(f'Ошибка сервера, некорретный запрос успешно обработан! Код ответа - {status}')
+            raise Exception(f'Ошибка сервера, некорректный запрос успешно обработан! Код ответа - {status}')
         else:
             assert status != 200
             print(f'\nОжидаемый код ответа сервера: 500')
