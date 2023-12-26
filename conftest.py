@@ -123,7 +123,7 @@ def russian_chars():
 
 
 def chinese_chars():
-    return '的一是不了人我在有他这为之大来以个中上们'
+    return '????????????????????'
 
 
 def special_chars():
@@ -140,8 +140,11 @@ def latin_chars():
 
 def pdf_test_report_maker():
     pdf_report = canvas.Canvas("tests/logs/pdf_files/example.pdf")
-    pdf_report.setFont("Helvetica", 12)
-    pdf_report.drawString(20, 810, "Hello, World!")
+    pdf_report.setFont("Times-Roman", 12)
+    pdf_report.drawString(60, 810, "TEST PASSED SUCCESSFULLY")
+    pdf_report.setFillColorRGB(5, 240, 0)
+    pdf_report.circle(30, 30, 10, fill=5)
+    # print(f"\n{pdf_report.getAvailableFonts()}")
     pdf_report.save()
 
 
