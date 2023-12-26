@@ -84,7 +84,7 @@ def introspection_of_test(request):
     print(f'- Имя коллекции (тестового класса): {request.cls}.')
     print(f'- Имя фикстуры: {request.fixturename}.')
     print(f'- Область видимости фикстуры: {request.scope}.')
-    print(f'- Относительный путь к тестовому модулю: {request.module.__name__}.')
+    print(f'- Имя тестового модуля: {request.module.__name__}.')
     print(f'- Абсолютный путь к тестовому модулю: {request.fspath}.')
     if request.cls:
         return f"\n У теста(тестируемой функции) {request.function.__name__} есть коллекция (тестовый класс).\n"
