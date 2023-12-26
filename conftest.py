@@ -2,9 +2,9 @@ import sys
 import pytest
 import requests
 from datetime import *
-import os
 import json
 from settings import *
+from reportlab.pdfgen import canvas
 
 filename = "tests/logs/logs.txt"
 
@@ -136,3 +136,13 @@ def digits():
 
 def latin_chars():
     return 'abcdefghijklmnopqrstwxyz'
+
+
+def pdf_test_report_maker():
+    pdf_report = canvas.Canvas("tests/logs/pdf_files/example.pdf")
+    pdf_report.setFont("Helvetica", 12)
+    pdf_report.drawString(20, 810, "Hello, World!")
+    pdf_report.save()
+
+
+pdf_test_report_maker()
