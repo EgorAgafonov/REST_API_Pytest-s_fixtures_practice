@@ -2,10 +2,22 @@ import sys
 import pytest
 import requests
 from datetime import *
+import os
 import json
 from settings import *
 
-filename = 'tests/logs/logs.txt'
+filename = "tests/logs/logs.txt"
+
+
+@pytest.hookimpl(hookwrapper=True, tryfirst=True)
+def pytest_runtest_makereport(item, call):
+    # This function helps to detect that some test failed
+    # and pass this information to teardown:
+
+    outcome = yield
+    rep = outcome.get_result()
+    setattr(item, "rep_" + rep.when, rep)
+    return rep
 
 
 @pytest.fixture(scope='class', autouse=True)
@@ -68,6 +80,7 @@ def duration_of_test(request):
 def introspection_of_test(request):
     yield
     print(f'\n- Имя теста (тестируемой функции): {request.function.__name__}.')
+    print(f"- Описание теста:\n'''{request.function.__doc__}'''")
     print(f'- Имя коллекции (тестового класса): {request.cls}.')
     print(f'- Имя фикстуры: {request.fixturename}.')
     print(f'- Область видимости фикстуры: {request.scope}.')
@@ -119,6 +132,7 @@ def special_chars():
 
 def digits():
     return '1234567890'
+
 
 def latin_chars():
     return 'abcdefghijklmnopqrstwxyz'
