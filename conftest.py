@@ -140,11 +140,17 @@ def latin_chars():
 
 def pdf_test_report_maker():
     pdf_report = canvas.Canvas("tests/logs/pdf_files/example.pdf")
-    pdf_report.setFont("Times-Roman", 12)
-    pdf_report.drawString(60, 810, "TEST PASSED SUCCESSFULLY")
-    pdf_report.setFillColorRGB(5, 240, 0)
-    pdf_report.circle(30, 30, 10, fill=5)
-    # print(f"\n{pdf_report.getAvailableFonts()}")
+    pdf_report.setFillColor('Navy')
+    pdf_report.roundRect(x=5, y=5, width=585, height=831, radius=12, stroke=1, fill=1)
+    pdf_report.drawImage("tests/logs/pdf_files/Python_logo.png", x=20, y=770, width=250, height=60)
+    pdf_report.setFillColor('Gainsboro')
+    pdf_report.roundRect(x=20, y=690, width=555, height=40, radius=12, stroke=1, fill=1)
+    pdf_report.setFillColor('YellowGreen')
+    pdf_report.circle(40, 710, 15, fill=1, stroke=1)
+    pdf_report.setFillColor('Black')
+    pdf_report.setFont("Helvetica-BoldOblique", 12)
+    pdf_report.drawString(60, 705, "100% PASSED")
+    print(f"\n{pdf_report.getAvailableFonts()}")
     pdf_report.save()
 
 
