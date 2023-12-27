@@ -110,6 +110,36 @@ def log_of_test(request, filename='tests/logs/logs.txt'):
                           f"{end_time - start_time} сек.\n\n")
 
 
+@pytest.fixture(scope='function', autouse=True)
+def pdf_test_report_maker(request, file_name="tests/logs/pdf_files/example.pdf"):
+    # Generate PDF Header:
+    pdf_report = canvas.Canvas(file_name)
+    pdf_report.setFillColor('SteelBlue')
+    pdf_report.roundRect(x=5, y=5, width=585, height=831, radius=12, stroke=0, fill=1)
+    pdf_report.setFillColor('White')
+    pdf_report.roundRect(x=10, y=10, width=575, height=821, radius=10, stroke=0, fill=1)
+    pdf_report.drawImage(b"tests/logs/pdf_files/Python_logo.png", x=20, y=740, width=77, height=80)
+    pdf_report.drawImage(b"tests/logs/pdf_files/Pytest_logo.png", x=120, y=730, width=97, height=100)
+    # Generate test name:
+    yield
+    pdf_report.setFillColor('Black')
+    pdf_report.setFont("Times-Bold", 16)
+    pdf_report.drawString(40, 700, b"{request.function.__name__}")
+    # Generate test result:
+    pdf_report.setFillColor('Gainsboro')
+    pdf_report.roundRect(x=20, y=630, width=555, height=40, radius=18, stroke=0, fill=1)
+    pdf_report.setFillColor('YellowGreen')
+    pdf_report.circle(40, 650, 15, fill=1, stroke=0)
+    pdf_report.setFillColor('Black')
+    pdf_report.setFont("Times-Bold", 16)
+    pdf_report.drawString(60, 645, "100% PASSED")
+    print(f"\n{pdf_report.getAvailableFonts()}")
+    pdf_report.save()
+
+
+# pdf_test_report_maker()
+
+
 min_python_310_required = pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.9 или '
                                                                                'ниже, выполнение теста отложено.')
 
@@ -138,23 +168,4 @@ def latin_chars():
     return 'abcdefghijklmnopqrstwxyz'
 
 
-def pdf_test_report_maker():
-    pdf_report = canvas.Canvas("tests/logs/pdf_files/example.pdf")
-    pdf_report.setFillColor('SteelBlue')
-    pdf_report.roundRect(x=5, y=5, width=585, height=831, radius=12, stroke=0, fill=1)
-    pdf_report.setFillColor('White')
-    pdf_report.roundRect(x=10, y=10, width=575, height=821, radius=10, stroke=0, fill=1)
-    pdf_report.drawImage("tests/logs/pdf_files/Python_logo.png", x=20, y=740, width=77, height=80)
-    pdf_report.drawImage("tests/logs/pdf_files/Pytest_logo.png", x=120, y=730, width=97, height=100)
-    pdf_report.setFillColor('Gainsboro')
-    pdf_report.roundRect(x=20, y=690, width=555, height=40, radius=12, stroke=0, fill=1)
-    pdf_report.setFillColor('YellowGreen')
-    pdf_report.circle(40, 710, 15, fill=1, stroke=0)
-    pdf_report.setFillColor('Black')
-    pdf_report.setFont("Helvetica-BoldOblique", 16)
-    pdf_report.drawString(60, 703, "100% PASSED")
-    print(f"\n{pdf_report.getAvailableFonts()}")
-    pdf_report.save()
 
-
-pdf_test_report_maker()
