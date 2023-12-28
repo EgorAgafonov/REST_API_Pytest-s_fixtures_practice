@@ -4,19 +4,25 @@ import requests
 from datetime import *
 import json
 from settings import *
+import os
 from reportlab.pdfgen import canvas
+import fpdf
+
 
 filename = "tests/logs/logs.txt"
 
 
-@pytest.hookimpl(hookwrapper=True, tryfirst=True)
-def pytest_runtest_makereport(item, call):
-    # This function helps to detect that some test failed
-    # and pass this information to teardown:
-    outcome = yield
-    rep = outcome.get_result()
-    setattr(item, "rep_" + rep.when, rep)
-    return rep
+@pytest.fixture(scope='function', autouse=True)
+def test_report(request):
+    yield
+    pdf = fpdf.FPDF(orientation='portrait', format='A4')  # pdf format
+    pdf.add_page()  # create new page
+    pdf.set_font("Arial", size=12)  # font and textsize
+    pdf.cell(200, 10, txt="your text", ln=1, align="L")
+    pdf.cell(200, 10, txt="your text", ln=2, align="L")
+    pdf.cell(200, 10, txt="your text", ln=3, align="L")
+    pdf.output("test.pdf")
+
 
 
 @pytest.fixture(scope='class', autouse=True)
@@ -111,45 +117,37 @@ def log_of_test(request, filename='tests/logs/logs.txt'):
 
 
 # @pytest.fixture(scope='function', autouse=True)
-# def pdf_test_report_maker(request):
-#     yield
-#     test_name = f'Имя теста (тестируемой функции): {request.function.__name__}.'
-#     test_idea = (f"- Описание теста:\n'''{request.function.__doc__}'''")
-#     print(f'- Имя коллекции (тестового класса): {request.cls}.')
-#     print(f'- Имя фикстуры: {request.fixturename}.')
-#     print(f'- Область видимости фикстуры: {request.scope}.')
-#     print(f'- Имя тестового модуля: {request.module.__name__}.')
-#     print(f'- Абсолютный путь к тестовому модулю: {request.fspath}.')
-#     if request.cls:
-#         return f"\n У теста(тестируемой функции) {request.function.__name__} есть коллекция (тестовый класс).\n"
-#     else:
-#         return f"\n У теста(тестируемой функции) {request.function.__name__} коллекция (тестовый класс) отсутствует.\n"
-#     # Generate PDF Header:
-#     pdf_report = canvas.Canvas("example.pdf")
-#     pdf_report.setFillColor('SteelBlue')
-#     pdf_report.roundRect(x=5, y=5, width=585, height=831, radius=12, stroke=0, fill=1)
-#     pdf_report.setFillColor('White')
-#     pdf_report.roundRect(x=10, y=10, width=575, height=821, radius=10, stroke=0, fill=1)
-#     pdf_report.drawImage("tests/logs/pdf_files/Python_logo.png", x=20, y=740, width=77, height=80)
-#     pdf_report.drawImage("tests/logs/pdf_files/Pytest_logo.png", x=120, y=730, width=97, height=100)
-#     # Generate test name:
-#     pdf_report.setFillColor('Black')
-#     pdf_report.setFont("Times-Bold", 16)
-#     test_name = str(request.function.__name__)
-#     pdf_report.drawString(40, 700, test_name)
-#     # Generate test result:
-#     pdf_report.setFillColor('Gainsboro')
-#     pdf_report.roundRect(x=20, y=630, width=555, height=40, radius=18, stroke=0, fill=1)
-#     pdf_report.setFillColor('YellowGreen')
-#     pdf_report.circle(40, 650, 15, fill=1, stroke=0)
-#     pdf_report.setFillColor('Black')
-#     pdf_report.setFont("Times-Bold", 16)
-#     pdf_report.drawString(60, 645, "100% PASSED")
-#     print(f"\n{pdf_report.getAvailableFonts()}")
-#     pdf_report.save()
-
-
-# pdf_test_report_maker()
+# def pdf_test_report_maker():
+# yield
+# test_name = str(request.function.__name__)
+# test_idea = str(request.function.__doc__)
+# tests_suit_name = str(request.cls)
+# fixture_name = str(request.fixturename)
+# fixture_scope = str(request.scope)
+# module_name = str(request.module.__name__)
+# module_fullpath = str(request.fspath)
+# Generate PDF Header:
+# pdf_report = canvas.Canvas("tests/logs/pdf_files/example.pdf")
+# pdf_report.setFillColor('SteelBlue')
+# pdf_report.roundRect(x=5, y=5, width=585, height=831, radius=12, stroke=0, fill=1)
+# pdf_report.setFillColor('White')
+# pdf_report.roundRect(x=10, y=10, width=575, height=821, radius=10, stroke=0, fill=1)
+# pdf_report.drawImage("tests/logs/pdf_files/Python_logo.jpg", x=20, y=740, width=77, height=80)
+# pdf_report.drawImage("tests/logs/pdf_files/Pytest_logo.jpg", x=120, y=730, width=97, height=100)
+# # Generate test name:
+# pdf_report.setFillColor('Black')
+# pdf_report.setFont("Times-Bold", 16)
+# pdf_report.drawString(40, 700, "Tests function name")
+# # Generate test result:
+# pdf_report.setFillColor('Gainsboro')
+# pdf_report.roundRect(x=20, y=630, width=555, height=40, radius=18, stroke=0, fill=1)
+# pdf_report.setFillColor('YellowGreen')
+# pdf_report.circle(40, 650, 15, fill=1, stroke=0)
+# pdf_report.setFillColor('Black')
+# pdf_report.setFont("Times-Bold", 16)
+# pdf_report.drawString(60, 645, "100% PASSED")
+# print(f"\n{pdf_report.getAvailableFonts()}")
+# pdf_report.save()
 
 
 min_python_310_required = pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.9 или '
