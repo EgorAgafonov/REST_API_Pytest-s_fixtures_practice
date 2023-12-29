@@ -20,9 +20,9 @@ def pdf_test_report_maker():
     # module_name = str(request.module.__name__)
     # module_fullpath = str(request.fspath)
     # # Generate PDF Header:
-    pdf_report = canvas.Canvas(os.path.abspath("tests/logs/pdf_files/test_report.pdf"))
-    pdfmetrics.registerFont(TTFont('Arial_Bold', 'tests/Arial_Bold.ttf'))
-    pdfmetrics.registerFont(TTFont('Arial_Cyr', 'tests/Arial_Cyr.ttf'))
+    pdf_report = canvas.Canvas("logs/pdf_files/test_report.pdf")
+    pdfmetrics.registerFont(TTFont('Arial_Bold', os.path.abspath('Arial_Bold.ttf')))
+    pdfmetrics.registerFont(TTFont('Arial_Cyr',  os.path.abspath('Arial_Cyr.ttf')))
     pdf_report.setFillColor('SteelBlue')
     pdf_report.roundRect(x=5, y=5, width=585, height=831, radius=12, stroke=0, fill=1)
     pdf_report.setFillColor('White')
