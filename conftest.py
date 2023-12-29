@@ -116,7 +116,7 @@ def log_of_test(request, filename='tests/logs/logs.txt'):
                           f"{end_time - start_time} сек.\n\n")
 
 
-@pytest.fixture(scope='function', autouse=True)
+@pytest.fixture(scope='function')
 def pdf_test_report_maker(request):
     yield
     test_name = str()
