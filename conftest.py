@@ -7,7 +7,8 @@ from settings import *
 import os
 from encodings import *
 from reportlab.pdfgen import canvas
-import fpdf
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 
 filename = "tests/logs/logs.txt"
@@ -135,16 +136,17 @@ def pdf_test_report_maker(request):
     pdf_report.drawImage("logs/pdf_files/Pytest_logo.jpg", x=120, y=730, width=97, height=100)
     # Generate test name:
     pdf_report.setFillColor('Black')
-    pdf_report.setFont("Courier", 20)
-    # unitext = Unicode()
-    pdf_report.drawString(40, 700, f"Название теста: {test_name}".encode())
+    pdfmetrics.registerFont(TTFont('Arial_Bold', 'Arial_Bold.ttf'))
+    pdfmetrics.registerFont(TTFont('Arial_Cyr', 'Arial_Cyr.ttf'))
+    pdf_report.setFont('Arial_Bold', 16)
+    pdf_report.drawString(40, 700, f"Тест: {test_name}")
     # Generate test result:
     pdf_report.setFillColor('Gainsboro')
     pdf_report.roundRect(x=20, y=630, width=555, height=40, radius=18, stroke=0, fill=1)
     pdf_report.setFillColor('YellowGreen')
     pdf_report.circle(40, 650, 15, fill=1, stroke=0)
     pdf_report.setFillColor('Black')
-    pdf_report.setFont("Times-Bold", 16)
+    pdf_report.setFont('Arial_Cyr', 12)
     pdf_report.drawString(60, 645, "PASSED   [100%]")
     print(pdf_report.getAvailableFonts())
     pdf_report.save()
