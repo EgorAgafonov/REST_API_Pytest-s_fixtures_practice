@@ -119,7 +119,7 @@ def log_of_test(request, filename='tests/logs/logs.txt'):
 @pytest.fixture(scope='function', autouse=True)
 def pdf_test_report_maker(request):
     yield
-    test_name = str(request.function.__name__)
+    test_name = str()
     test_idea = str(request.function.__doc__)
     tests_suit_name = str(request.cls)
     fixture_name = str(request.fixturename)
@@ -128,6 +128,8 @@ def pdf_test_report_maker(request):
     module_fullpath = str(request.fspath)
     # Generate PDF Header:
     pdf_report = canvas.Canvas(os.path.abspath("logs/pdf_files/test_report.pdf"))
+    pdfmetrics.registerFont(TTFont('Arial_Bold', 'Arial_Bold.ttf'))
+    pdfmetrics.registerFont(TTFont('Arial_Cyr', 'Arial_Cyr.ttf'))
     pdf_report.setFillColor('SteelBlue')
     pdf_report.roundRect(x=5, y=5, width=585, height=831, radius=12, stroke=0, fill=1)
     pdf_report.setFillColor('White')
@@ -136,10 +138,8 @@ def pdf_test_report_maker(request):
     pdf_report.drawImage("logs/pdf_files/Pytest_logo.jpg", x=120, y=730, width=97, height=100)
     # Generate test name:
     pdf_report.setFillColor('Black')
-    pdfmetrics.registerFont(TTFont('Arial_Bold', 'Arial_Bold.ttf'))
-    pdfmetrics.registerFont(TTFont('Arial_Cyr', 'Arial_Cyr.ttf'))
     pdf_report.setFont('Arial_Bold', 16)
-    pdf_report.drawString(40, 700, f"Тест: {test_name}")
+    pdf_report.drawString(40, 700, f"Тест: {request.function.__name__}")
     # Generate test result:
     pdf_report.setFillColor('Gainsboro')
     pdf_report.roundRect(x=20, y=630, width=555, height=40, radius=18, stroke=0, fill=1)
@@ -150,7 +150,6 @@ def pdf_test_report_maker(request):
     pdf_report.drawString(60, 645, "PASSED   [100%]")
     print(pdf_report.getAvailableFonts())
     pdf_report.save()
-
 
 
 min_python_310_required = pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.9 или '
