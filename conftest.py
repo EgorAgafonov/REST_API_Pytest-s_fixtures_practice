@@ -5,6 +5,7 @@ from datetime import *
 import json
 from settings import *
 import os
+from encodings import *
 from reportlab.pdfgen import canvas
 import fpdf
 
@@ -12,14 +13,15 @@ import fpdf
 filename = "tests/logs/logs.txt"
 
 
-# @pytest.fixture(scope='function', autouse=True)
-# def test_report(request):
-#     yield
-#     pdf = fpdf.FPDF(orientation='portrait', format='a4')
-#     pdf.add_page()
-#     pdf.set_font("Arial", style='BI', size=12)
-#     pdf.cell(200, 10, txt=str(f"{request.function.__name__}"), ln=1, align="L")
-#     pdf.output(os.path.abspath("logs/pdf_files/test_report.pdf"))
+@pytest.hookimpl(hookwrapper=True, tryfirst=True)
+def pytest_runtest_makereport(item, call):
+    # This function helps to detect that some test failed
+    # and pass this information to teardown:
+
+    outcome = yield
+    rep = outcome.get_result()
+    setattr(item, "rep_" + rep.when, rep)
+    return rep
 
 
 @pytest.fixture(scope='class')
@@ -133,8 +135,9 @@ def pdf_test_report_maker(request):
     pdf_report.drawImage("logs/pdf_files/Pytest_logo.jpg", x=120, y=730, width=97, height=100)
     # Generate test name:
     pdf_report.setFillColor('Black')
-    pdf_report.setFont("Times-Bold", 24)
-    pdf_report.drawString(40, 700, f"Название теста: {test_name}")
+    pdf_report.setFont("Courier", 20)
+    # unitext = Unicode()
+    pdf_report.drawString(40, 700, f"Название теста: {test_name}".encode())
     # Generate test result:
     pdf_report.setFillColor('Gainsboro')
     pdf_report.roundRect(x=20, y=630, width=555, height=40, radius=18, stroke=0, fill=1)
@@ -142,9 +145,10 @@ def pdf_test_report_maker(request):
     pdf_report.circle(40, 650, 15, fill=1, stroke=0)
     pdf_report.setFillColor('Black')
     pdf_report.setFont("Times-Bold", 16)
-    pdf_report.drawString(60, 645, "100% PASSED")
-    # print(f"\n{pdf_report.getAvailableFonts()}")
+    pdf_report.drawString(60, 645, "PASSED   [100%]")
+    print(pdf_report.getAvailableFonts())
     pdf_report.save()
+
 
 
 min_python_310_required = pytest.mark.skipif(sys.version_info > (3, 9), reason='Тест требует python версии 3.9 или '
