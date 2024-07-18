@@ -8,7 +8,7 @@ class TestCatFacts:
     def __init__(self):
         self.cf = CatFacts()
 
-    @pytest.mark.one
+    @pytest.mark.one_cats
     @pytest.mark.parametrize('limit', [1, 2, 9], ids=['one_breed', 'two_breeds', 'three_breeds'])
     def test_get_list_of_breeds_positive(self, limit):
         """Позитивные тест-кейсы для проверки получения списка пород кошек в количестве, заданном в параметре запроса.
@@ -25,7 +25,7 @@ class TestCatFacts:
         assert status == 200, f'Запрос отклонен. Код ответа: {status}'
         assert len(list_of_breeds) == limit, 'Количество пород в списке не соответствует заданному значению'
 
-    @pytest.mark.two
+    @pytest.mark.two_cats
     @pytest.mark.parametrize('max_length', [30, 50, 70], ids=['30_chars', '50_chars', '70_chars'])
     def test_get_random_fact_positive(self, max_length):
         """"""
