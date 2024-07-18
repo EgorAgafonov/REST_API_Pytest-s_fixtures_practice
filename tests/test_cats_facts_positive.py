@@ -27,7 +27,9 @@ class Test_CatFacts:
     @pytest.mark.two_cats
     @pytest.mark.parametrize('max_length', [30, 50, 70], ids=['30_chars', '50_chars', '70_chars'])
     def test_get_random_fact_positive(self, max_length):
-        """"""
+        """Позитивные тест-кейсы для проверки получения случайного факта о жизни кошек. Валидации тестов успешны,
+        если каждый ответ сервера содержит строку символов (в т. числе пробелы) в количестве, не превышающим значения
+        аргумента max_length."""
 
         status, result = cf.get_fact_of_cats(max_length=max_length)
 
