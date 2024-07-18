@@ -22,12 +22,18 @@ class TestCatFacts:
             breed = result["data"][0]["breed"]
             list_of_breeds.append(breed)
 
-        assert status == 200, 'Запрос отклонен'
+        assert status == 200, f'Запрос отклонен. Код ответа: {status}'
         assert len(list_of_breeds) == limit, 'Количество пород в списке не соответствует заданному значению'
 
+    @pytest.mark.two
+    @pytest.mark.parametrize('max_length', [30, 50, 70], ids=['30_chars', '50_chars', '70_chars'])
+    def test_get_random_fact_positive(self, max_length):
+        """"""
 
+        status, result = self.cf.get_fact_of_cats(max_length=max_length)
 
-
-
-
-
+        assert status == 200, f'Запрос отклонен. Код ответа: {status}'
+        assert len(result["fact"]) <= max_length, ('ОШИБКА! Количество символов в строке ответа больше параметра '
+                                                   'max_length')
+        assert result["length"] <= max_length, ('ОШИБКА! Количество символов в строке ответа больше параметра '
+                                                'max_length')

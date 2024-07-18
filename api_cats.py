@@ -15,7 +15,6 @@ class CatFacts:
 
         query = {'limit': limit}
         response = requests.get(self.base_url + '/breeds', params=query)
-
         status = response.status_code
         result = ""
         try:
@@ -24,4 +23,21 @@ class CatFacts:
             result = response.text
 
         return status, result
+
+    def get_fact_of_cats(self, max_length):
+        """Метод для получения случайного факта из жизни кошек. Максимальная длинна строки с фактом ограничена
+        параметром query (аргумент max_length)."""
+
+        query = {'max_length': max_length}
+        response = requests.get(self.base_url + '/fact', params=query)
+        status = response.status_code
+        result = ""
+        try:
+            result = response.json()
+        except json.decoder.JSONDecodeError:
+            result = response.text
+
+        return status, result
+
+
 
