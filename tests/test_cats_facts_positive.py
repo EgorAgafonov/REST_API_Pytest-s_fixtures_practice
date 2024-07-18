@@ -1,12 +1,11 @@
 from api_cats import CatFacts
 import pytest
 
+cf = CatFacts()
 
-class TestCatFacts:
+
+class Test_CatFacts:
     """Набор позитивных тест-кейсов для проверки API сервиса https://catfact.ninja"""
-
-    def __init__(self):
-        self.cf = CatFacts()
 
     @pytest.mark.one_cats
     @pytest.mark.parametrize('limit', [1, 2, 9], ids=['one_breed', 'two_breeds', 'three_breeds'])
@@ -15,7 +14,7 @@ class TestCatFacts:
         Используется фикстура parametrize фрейм-ка pytest с верифицированными значениями. Валидации тестов успешны,
         если каждый ответ сервера содержит список пород кошек в количестве, соответствующим значению аргумента limit."""
 
-        status, result = self.cf.get_list_of_cats_breeds(limit=limit)
+        status, result = cf.get_list_of_cats_breeds(limit=limit)
 
         list_of_breeds = []
         for i in result["data"]:
@@ -30,7 +29,7 @@ class TestCatFacts:
     def test_get_random_fact_positive(self, max_length):
         """"""
 
-        status, result = self.cf.get_fact_of_cats(max_length=max_length)
+        status, result = cf.get_fact_of_cats(max_length=max_length)
 
         assert status == 200, f'Запрос отклонен. Код ответа: {status}'
         assert len(result["fact"]) <= max_length, ('ОШИБКА! Количество символов в строке ответа больше параметра '
