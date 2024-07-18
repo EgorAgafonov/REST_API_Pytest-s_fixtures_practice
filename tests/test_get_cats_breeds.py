@@ -5,13 +5,14 @@ cf = CatFacts()
 
 
 class TestCatFacts:
-    """"""
+    """Набор позитивных тест-кейсов для проверки API сервиса https://catfact.ninja"""
+
     @pytest.mark.one
-    @pytest.mark.parametrize('limit', [1, 2, 3], ids=['one_breed', 'two_breeds', 'three_breeds'])
+    @pytest.mark.parametrize('limit', [1, 2, 9], ids=['one_breed', 'two_breeds', 'three_breeds'])
     def test_get_list_of_breeds_positive(self, limit):
         """Позитивные тест-кейсы для проверки получения списка пород кошек в количестве, заданном в параметре запроса.
-        Используется фикстура parametrize фрейм-ка pytest с верифицированными значениями для последовательной проверки
-        каждого запроса."""
+        Используется фикстура parametrize фрейм-ка pytest с верифицированными значениями. Валидации тестов успешны,
+        если каждый ответ сервера содержит список пород кошек в количестве, соответствующим значению аргумента limit."""
 
         status, result = cf.get_list_of_cats_breeds(limit=limit)
 
@@ -22,9 +23,8 @@ class TestCatFacts:
 
         print(f"\n{list_of_breeds}\n")
 
-        # assert status == 200, 'Запрос FAILED'
-        # assert len(result.get('pets')) == limit, 'Количество пород в списке не соответствует заданному значению'
-        # print(f"\nТестируемое значение filter = : '{filter}'")
+        assert status == 200, 'Запрос отклонен'
+        assert len(list_of_breeds) == limit, 'Количество пород в списке не соответствует заданному значению'
 
 
 
