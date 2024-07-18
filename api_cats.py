@@ -9,9 +9,18 @@ class CatFacts:
     def __init__(self):
         self.base_url = 'https://catfact.ninja'
 
-    def get_list_of_cats(self, limit: str) -> list:
-        """"""
+    def get_list_of_cats_breeds(self, limit: int):
+        """Метод для получения списка пород кошек. Количество пород в списке определяется пользователем с помощью
+        параметра query (аргумент limit)."""
+
         query = {'limit': limit}
         response = requests.get(self.base_url + '/breeds', params=query)
 
+        status = response.status_code
+        result = ""
+        try:
+            result = response.json()
+        except json.decoder.JSONDecodeError:
+            result = response.text
 
+        return status, result

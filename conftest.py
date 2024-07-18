@@ -10,7 +10,6 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
-
 filename = "tests/logs/logs.txt"
 
 
@@ -45,7 +44,7 @@ def duration_of_collection(request, filename=filename):
 
 @pytest.fixture(scope='class')
 def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_email, password=valid_password,
-                filename=filename) -> json:
+                filename=filename) -> str:
     """Метод для авторизации на платформе PetFriends и получения auth-key-ключа для отправки запросов. Одновременно
     является и тестируемой функцией (каждый раз при вызове), и setup-фикстурой pytest для передачи в качестве аргумента
     в тестируемые функции (каждый запрос требует отправлять в заголовке auth_key). Функция возвращает строковое значение
@@ -64,11 +63,11 @@ def get_api_key(base_url="https://petfriends.skillfactory.ru/", email=valid_emai
     assert 'key' in result
 
     # print(f'\n--- Запрос api-ключа успешно выполнен, пользователь авторизован. ---')
-    filename = os.path.join(os.path.dirname(__file__), filename)
-    with open(filename, 'a') as file_object:
-        file_object.write(f'\n\n\n--- Запрос api-ключа успешно выполнен, пользователь авторизован. ---\n\n')
+    # filename = os.path.join(os.path.dirname(__file__), filename)
+    # with open(filename, 'a') as file_object:
+    #     file_object.write(f'\n\n\n--- Запрос api-ключа успешно выполнен, пользователь авторизован. ---\n\n')
 
-    return result['key']
+    return result["key"]
 
 
 @pytest.fixture(scope='function')
