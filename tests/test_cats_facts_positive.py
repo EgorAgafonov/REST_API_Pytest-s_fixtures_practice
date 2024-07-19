@@ -46,7 +46,10 @@ class Test_CatFacts:
     @pytest.mark.parametrize('max_length', [28, 54, 99], ids=['28_chars', '54_chars', '99_chars'])
     @pytest.mark.parametrize('limit', [1, 2, 6], ids=['one_fact', 'two_facts', 'six_facts'])
     def test_get_list_of_facts_posit(self, limit, max_length):
-        """"""
+        """Позитивные тест-кейсы для проверки функции получения фактов о жизни кошек в соответствии с указанными в
+        запросе параметрами limit и max_length. Валидации тестов успешны, если каждый ответ сервера содержит набор
+        символов (в т. числе пробелы) в количестве, не превышающим значения аргумента max_length, а количество фактов
+        в запросе соответствует значению аргумента limit."""
 
         status, result = cf.get_list_of_facts(max_length=max_length, limit=limit)
 
