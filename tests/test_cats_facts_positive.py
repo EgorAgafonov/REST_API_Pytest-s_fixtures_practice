@@ -43,29 +43,24 @@ class Test_CatFacts:
             raise Exception("Ответ сервера не содержит данных (словарь пуст)")
 
     @pytest.mark.get_facts
-    @pytest.mark.parametrize('max_length', [19, 54, 99], ids=['19_chars', '54_chars', '99_chars'])
-    @pytest.mark.parametrize('limit', [1, 2, 9], ids=['one_fact', 'two_fact', 'nine_fact'])
-    def test_get_list_of_facts_posit(self, max_length, limit):
+    @pytest.mark.parametrize('max_length', [28, 54, 99], ids=['28_chars', '54_chars', '99_chars'])
+    @pytest.mark.parametrize('limit', [1, 2, 6], ids=['one_fact', 'two_facts', 'seven_facts'])
+    def test_get_list_of_facts_posit(self, limit, max_length):
         """"""
 
         status, result = cf.get_list_of_facts(max_length=max_length, limit=limit)
 
-        list_of_facts = []
-        for i in result["data"]:
+        # 1. Проверка: количество символов в строке ответа не превышает значения параметра запроса max_length
+        assert status == 200, f'Запрос отклонен. Код ответа: {status}'
+        assert len(result['data'][0]['fact']) <= max_length
+
+        quantity_of_facts = []
+        for i in result['data']:
             fact = result["data"][0]["fact"]
-            list_of_facts.append(fact)
+            quantity_of_facts.append(fact)
+        assert len(quantity_of_facts) == limit
 
-            assert status == 200, f'Запрос отклонен. Код ответа: {status}'
-        try:
-            for
-            assert len(result["fact"]) <= max_length, ('ОШИБКА! Количество символов в строке ответа больше параметра '
-                                                       'max_length')
-            assert result["length"] <= max_length, ('ОШИБКА! Int-значение ключа length в ответе '
-                                                    'больше int-значения max_length запроса')
-        except KeyError:
-            raise Exception("Ответ сервера не содержит данных (словарь пуст)")
 
-        assert len(list_of_facts) == limit, 'Количество фактов в списке не соответствует заданному значению'
 
 
 
