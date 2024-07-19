@@ -57,6 +57,7 @@ class Test_CatFacts:
         assert status == 200, f'Запрос отклонен. Код ответа: {status}'
 
         # 2. Проверка на количество символов в строке ответа, не превышающее значения параметра max_length:
+        assert len(result['data'][0]['fact']) != ''
         assert len(result['data'][0]['fact']) <= max_length
 
         # 3. Проверка на количество фактов в ответе, равное значению параметра limit:
