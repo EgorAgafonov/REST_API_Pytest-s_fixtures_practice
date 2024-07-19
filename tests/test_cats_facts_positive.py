@@ -39,13 +39,36 @@ class Test_CatFacts:
                                                        'max_length')
             assert result["length"] <= max_length, ('ОШИБКА! Int-значение ключа length в ответе '
                                                     'больше int-значения max_length запроса')
-            print(type(result["length"]))
         except KeyError:
             raise Exception("Ответ сервера не содержит данных (словарь пуст)")
 
     @pytest.mark.get_facts
-    @pytest.mark.parametrize('max_length', [20, 50, 70], ids=['30_chars', '50_chars', '70_chars'])
+    @pytest.mark.parametrize('max_length', [19, 54, 99], ids=['19_chars', '54_chars', '99_chars'])
+    @pytest.mark.parametrize('limit', [1, 2, 9], ids=['one_fact', 'two_fact', 'nine_fact'])
     def test_get_list_of_facts_posit(self, max_length, limit):
+        """"""
+
+        status, result = cf.get_list_of_facts(max_length=max_length, limit=limit)
+
+        list_of_facts = []
+        for i in result["data"]:
+            fact = result["data"][0]["fact"]
+            list_of_facts.append(fact)
+
+            assert status == 200, f'Запрос отклонен. Код ответа: {status}'
+        try:
+            for
+            assert len(result["fact"]) <= max_length, ('ОШИБКА! Количество символов в строке ответа больше параметра '
+                                                       'max_length')
+            assert result["length"] <= max_length, ('ОШИБКА! Int-значение ключа length в ответе '
+                                                    'больше int-значения max_length запроса')
+        except KeyError:
+            raise Exception("Ответ сервера не содержит данных (словарь пуст)")
+
+        assert len(list_of_facts) == limit, 'Количество фактов в списке не соответствует заданному значению'
+
+
+
 
 
 
