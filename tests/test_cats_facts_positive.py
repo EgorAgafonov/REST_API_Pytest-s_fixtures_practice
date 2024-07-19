@@ -44,21 +44,36 @@ class Test_CatFacts:
 
     @pytest.mark.get_facts
     @pytest.mark.parametrize('max_length', [28, 54, 99], ids=['28_chars', '54_chars', '99_chars'])
-    @pytest.mark.parametrize('limit', [1, 2, 6], ids=['one_fact', 'two_facts', 'seven_facts'])
+    @pytest.mark.parametrize('limit', [1, 2, 6], ids=['one_fact', 'two_facts', 'six_facts'])
     def test_get_list_of_facts_posit(self, limit, max_length):
         """"""
 
         status, result = cf.get_list_of_facts(max_length=max_length, limit=limit)
 
-        # 1. Проверка: количество символов в строке ответа не превышает значения параметра запроса max_length
+        # 1. Проверка статус-кода ответа сервера:
         assert status == 200, f'Запрос отклонен. Код ответа: {status}'
+
+        # 2. Проверка на количество символов в строке ответа, не превышающее значения параметра max_length:
         assert len(result['data'][0]['fact']) <= max_length
 
+        # 3. Проверка ответа на соответствие значения ключа 'length' фактическому количеству символов строки из
+        # ключа 'fact':
+        quantity_of_chars = []
+        for i in result['data']:
+            # nums_value = result["data"][0]["length"]
+            # quantity_of_chars.append(nums_value)
+            value = i['length']
+            assert value == len(result['data'][0]['fact'])
+
+
+        # 4. Проверка на количество фактов в ответе, равное значению параметра limit:
         quantity_of_facts = []
         for i in result['data']:
             fact = result["data"][0]["fact"]
             quantity_of_facts.append(fact)
         assert len(quantity_of_facts) == limit
+
+
 
 
 
