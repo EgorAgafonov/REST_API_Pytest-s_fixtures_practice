@@ -39,5 +39,20 @@ class CatFacts:
 
         return status, result
 
+    def get_list_of_facts(self, max_length, limit):
+        """Метод для получения случайного факта из жизни кошек. Максимальная длинна строки с фактом ограничена
+        параметром query (аргумент max_length)."""
+
+        query = {'max_length': max_length, 'limit': limit}
+        response = requests.get(self.base_url + '/facts', params=query)
+        status = response.status_code
+        result = ""
+        try:
+            result = response.json()
+        except json.decoder.JSONDecodeError:
+            result = response.text
+
+        return status, result
+
 
 
