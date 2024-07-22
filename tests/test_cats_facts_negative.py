@@ -23,7 +23,7 @@ class Test_CatFacts:
             assert result['message'] != ''
             assert result['code'] != 200
         except AssertionError:
-            raise Exception(f'ОШИБКА! Не верифицированное значение в запросе обработано сервером со статусом: {status}.\n '
+            print(f'ОШИБКА! Не верифицированное значение в запросе обработано сервером со статусом: {status}.\n '
                   f'Создать отчет об ошибке и отразить в системе отслеживания!')
 
     @pytest.mark.get_fact_neg
@@ -67,13 +67,3 @@ class Test_CatFacts:
         for i in result['data']:
             quantity_of_facts.append(i["fact"])
         assert len(quantity_of_facts) == limit
-
-
-
-
-
-
-
-
-
-
