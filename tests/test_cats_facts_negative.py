@@ -17,7 +17,7 @@ class Test_CatFacts:
 
         status, result = cf.get_list_of_cats_breeds(limit=limit)
         # 1. Проверка статуса ответа:
-        assert status != 200, ()
+        assert status != 200
         # 2. Проверка тела ответа на предмет наличия верифицированных ключей и их значений:
         try:
             assert result['message'] != ''
@@ -27,22 +27,24 @@ class Test_CatFacts:
                   f'Создать отчет об ошибке и отразить в системе отслеживания!')
 
     @pytest.mark.get_fact_neg
-    @pytest.mark.parametrize('max_length', [20, 50, 70], ids=['30_chars', '50_chars', '70_chars'])
+    @pytest.mark.parametrize('max_length', ['twenty', 19, "", 0], ids=['string_num_length', 'non_valid_int_length',
+                                                                       'empty_string_length', 'zero_int_length'])
     def test_get_random_fact_posit(self, max_length):
-        """Позитивные тест-кейсы для проверки получения случайного факта о жизни кошек. Валидации тестов успешны,
-        если каждый ответ сервера содержит строку символов (в т. числе пробелы) в количестве, не превышающим значения
-        аргумента max_length."""
+        """Негативные тест-кейсы для проверки получения массива с фактами о жизни кошек с количеством символов в строке
+        ответа, заданном параметром max_length. Используется фикстура parametrize с не верифицированными значениями
+        параметра max_length. Валидации негативных тестов успешны, если каждый ответ сервера содержит статус ответа
+        (!= 200)."""
 
         status, result = cf.get_fact_of_cats(max_length=max_length)
 
-        assert status == 200, f'Запрос отклонен. Код ответа: {status}'
+        # 1. Проверка статуса ответа:
+        assert status != 200, f"Ошибка! Сервер обработал не верифицированный параметр запроса со статусом: {status}"
+        # 2. Проверка тела ответа на предмет отсутствия ключей и значений при некорректном запросе:
         try:
-            assert len(result["fact"]) <= max_length, ('ОШИБКА! Количество символов в строке ответа больше параметра '
-                                                       'max_length')
-            assert result["length"] <= max_length, ('ОШИБКА! Int-значение ключа length в ответе '
-                                                    'больше int-значения max_length запроса')
-        except KeyError:
-            raise Exception("Ответ сервера не содержит данных (словарь пуст)")
+            assert result == {}
+        except AssertionError:
+            print(f'ОШИБКА! Не верифицированное значение в запросе обработано сервером со статусом: {status}.\n '
+                  f'Создать отчет об ошибке и отразить в системе отслеживания!')
 
     @pytest.mark.get_facts_neg
     @pytest.mark.parametrize('max_length', [28, 54, 99], ids=['28_chars', '54_chars', '99_chars'])
