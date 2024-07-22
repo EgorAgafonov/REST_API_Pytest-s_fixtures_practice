@@ -13,17 +13,18 @@ class Test_CatFacts:
     def test_get_list_of_breeds_negat(self, limit):
         """Негативные тест-кейсы для проверки получения списка пород кошек в количестве, заданном в параметре запроса.
         Используется фикстура parametrize фрейм-ка pytest с не верифицированными значениями. Валидации негативных тестов
-         успешны, если каждый ответ сервера содержит отрицательный статус ответа."""
+         успешны, если каждый ответ сервера содержит статус ответа (!= 200)."""
 
         status, result = cf.get_list_of_cats_breeds(limit=limit)
-
-
-        print(status)
-        print(result)
-
-
-        # assert status == 200, f'Запрос отклонен. Код ответа: {status}'
-        # assert len(list_of_breeds) == limit, 'Количество пород в списке не соответствует заданному значению'
+        # 1. Проверка статуса ответа:
+        assert status != 200, ()
+        # 2. Проверка тела ответа на предмет наличия верифицированных ключей и их значений:
+        try:
+            assert result['message'] != ''
+            assert result['code'] != 200
+        except AssertionError:
+            raise Exception(f'ОШИБКА! Не верифицированное значение в запросе обработано сервером со статусом: {status}.\n '
+                  f'Создать отчет об ошибке и отразить в системе отслеживания!')
 
     @pytest.mark.get_fact_neg
     @pytest.mark.parametrize('max_length', [20, 50, 70], ids=['30_chars', '50_chars', '70_chars'])
