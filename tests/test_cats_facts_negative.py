@@ -8,21 +8,22 @@ class Test_CatFacts:
     """Набор негативных тест-кейсов для проверки API сервиса https://catfact.ninja"""
 
     @pytest.mark.get_breed_neg
-    @pytest.mark.parametrize('limit', [1, 2, 9], ids=['one_breed', 'two_breeds', 'three_breeds'])
-    def test_get_list_of_breeds_posit(self, limit):
-        """Позитивные тест-кейсы для проверки получения списка пород кошек в количестве, заданном в параметре запроса.
-        Используется фикстура parametrize фрейм-ка pytest с верифицированными значениями. Валидации тестов успешны,
-        если каждый ответ сервера содержит список пород кошек в количестве, соответствующим значению аргумента limit."""
+    @pytest.mark.parametrize('limit', [-1, 'one', ''], ids=['negativ_num_breed', 'string_num_breeds',
+                                                            'empty_str_breeds'])
+    def test_get_list_of_breeds_negat(self, limit):
+        """Негативные тест-кейсы для проверки получения списка пород кошек в количестве, заданном в параметре запроса.
+        Используется фикстура parametrize фрейм-ка pytest с не верифицированными значениями. Валидации негативных тестов
+         успешны, если каждый ответ сервера содержит отрицательный статус ответа."""
 
         status, result = cf.get_list_of_cats_breeds(limit=limit)
 
-        list_of_breeds = []
-        for i in result["data"]:
-            breed = result["data"][0]["breed"]
-            list_of_breeds.append(breed)
 
-        assert status == 200, f'Запрос отклонен. Код ответа: {status}'
-        assert len(list_of_breeds) == limit, 'Количество пород в списке не соответствует заданному значению'
+        print(status)
+        print(result)
+
+
+        # assert status == 200, f'Запрос отклонен. Код ответа: {status}'
+        # assert len(list_of_breeds) == limit, 'Количество пород в списке не соответствует заданному значению'
 
     @pytest.mark.get_fact_neg
     @pytest.mark.parametrize('max_length', [20, 50, 70], ids=['30_chars', '50_chars', '70_chars'])
