@@ -29,9 +29,9 @@ class Test_CatFacts:
     @pytest.mark.get_fact_neg
     @pytest.mark.parametrize('max_length', ['twenty', 19, "", 0], ids=['string_num_length', 'non_valid_int_length',
                                                                        'empty_string_length', 'zero_int_length'])
-    def test_get_random_fact_posit(self, max_length):
-        """Негативные тест-кейсы для проверки получения массива с фактами о жизни кошек с количеством символов в строке
-        ответа, заданном параметром max_length. Используется фикстура parametrize с не верифицированными значениями
+    def test_get_random_fact_negat(self, max_length):
+        """Негативные тест-кейсы для проверки получения строки с фактом о жизни кошек в количестве символов, равном
+        значению параметра max_length. Используется фикстура parametrize с не верифицированными значениями
         параметра max_length. Валидации негативных тестов успешны, если каждый ответ сервера содержит статус ответа
         (!= 200)."""
 
@@ -49,8 +49,8 @@ class Test_CatFacts:
     @pytest.mark.get_facts_neg
     @pytest.mark.parametrize('max_length', [28, 54, 99], ids=['28_chars', '54_chars', '99_chars'])
     @pytest.mark.parametrize('limit', [1, 2, 6], ids=['one_fact', 'two_facts', 'six_facts'])
-    def test_get_list_of_facts_posit(self, limit, max_length):
-        """Позитивные тест-кейсы для проверки функции получения фактов о жизни кошек в соответствии с указанными в
+    def test_get_list_of_facts_negat(self, limit, max_length):
+        """Негативные тест-кейсы для проверки функции получения фактов о жизни кошек в соответствии с указанными в
         запросе параметрами limit и max_length. Валидации тестов успешны, если каждый ответ сервера содержит набор
         символов (в т. числе пробелы) в количестве, не превышающим значения аргумента max_length, а количество фактов
         в запросе соответствует значению аргумента limit."""
