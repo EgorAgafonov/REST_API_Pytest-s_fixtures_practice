@@ -47,25 +47,22 @@ class Test_CatFacts:
                   f'Создать отчет об ошибке и отразить в системе отслеживания!')
 
     @pytest.mark.get_facts_neg
-    @pytest.mark.parametrize('max_length', [28, 54, 99], ids=['28_chars', '54_chars', '99_chars'])
-    @pytest.mark.parametrize('limit', [1, 2, 6], ids=['one_fact', 'two_facts', 'six_facts'])
+    @pytest.mark.parametrize('max_length', ['twenty', 19, ""], ids=['string_num_length', 'non_valid_int_length',
+                                                                    'empty_string_length'])
+    @pytest.mark.parametrize('limit', [-1, 'one', ''], ids=['negativ_num_limit', 'string_num_limit',
+                                                            'empty_str_limit'])
     def test_get_list_of_facts_negat(self, limit, max_length):
         """Негативные тест-кейсы для проверки функции получения фактов о жизни кошек в соответствии с указанными в
-        запросе параметрами limit и max_length. Валидации тестов успешны, если каждый ответ сервера содержит набор
-        символов (в т. числе пробелы) в количестве, не превышающим значения аргумента max_length, а количество фактов
-        в запросе соответствует значению аргумента limit."""
+        запросе не верифицированными параметрами limit и max_length. Валидации негативных тестов успешны, если
+        статус-код ответа != 200 и значение ключа 'data' в теле ответа равно пустому списку."""
 
         status, result = cf.get_list_of_facts(max_length=max_length, limit=limit)
 
         # 1. Проверка статус-кода ответа сервера:
-        assert status == 200, f'Запрос отклонен. Код ответа: {status}'
+        assert status != 200, (f'ОШИБКА!\n'
+                               f'Запрос с не верифицированными параметрами принят сервером.\n'
+                               f'Код ответа: {status}.\n'
+                               f'Создать отчет об ошибке и отразить в системе отслеживания!')
 
-        # 2. Проверка на количество символов в строке ответа, не превышающее значения параметра max_length:
-        assert len(result['data'][0]['fact']) != ''
-        assert len(result['data'][0]['fact']) <= max_length
-
-        # 3. Проверка на количество фактов в ответе, равное значению параметра limit:
-        quantity_of_facts = []
-        for i in result['data']:
-            quantity_of_facts.append(i["fact"])
-        assert len(quantity_of_facts) == limit
+        # 2. Проверка значения ключа 'data' в теле ответа:
+        assert result['data'] == []
