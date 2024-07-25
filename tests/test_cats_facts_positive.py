@@ -18,10 +18,13 @@ class Test_CatFacts:
 
         list_of_breeds = []
         for i in result["data"]:
-            breed = result["data"][0]["breed"]
+            breed = i["breed"]
             list_of_breeds.append(breed)
 
+        # 1. Проверка статус-кода:
         assert status == 200, f'Запрос отклонен. Код ответа: {status}'
+
+        # 2. Проверка на количество парод в ответе, равное значению параметра limit:
         assert len(list_of_breeds) == limit, 'Количество пород в списке не соответствует заданному значению'
 
     @pytest.mark.get_fact
